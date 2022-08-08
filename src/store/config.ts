@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
 import { Layout } from "./interface";
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 
 export const useConfig = defineStore("config", () => {
   const layout:Layout = reactive({

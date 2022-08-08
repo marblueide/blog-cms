@@ -63,8 +63,8 @@ watch(
 .layout-container .layout-main {
   padding: 0 !important;
   overflow: hidden;
-  width: 100%;
   height: 100%;
+  margin: var(--main-space) var(--main-space) 60px var(--main-space);
 }
 .layout-main-scrollbar {
   width: 100%;
