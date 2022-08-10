@@ -18,6 +18,7 @@ import { defineProps, defineEmits, toRefs } from "vue";
 const props = defineProps({
   currentPage: {
     type: Number,
+    default: 1
   },
   pageSize: {
     type: Number,
@@ -28,7 +29,7 @@ const props = defineProps({
     default: true,
   },
   total: {
-    type: Number
+    type: Number,
   }
 });
 

@@ -118,13 +118,10 @@ const searchChange = _.debounce((e) => {
 </script>
 
 <style scoped lang="scss">
-.table-header-box{
-  
-}
 .table-header {
   display: flex;
   justify-content: space-between;
-  padding: 15px 15px 0;
+  padding: 15px 15px;
   background-color: white;
   span {
     color: #fff;

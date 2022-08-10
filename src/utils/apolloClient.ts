@@ -37,7 +37,9 @@ export const apolloProvider = createApolloProvider({
 
 
 export function setAuthorization(authorization:string){
-  headers['Authorization'] = `Bearer ${authorization}`
+  setHeader('Authorization', `Bearer ${authorization}`)
 }
 
-
+export function setHeader(key: string, val: string) {
+  headers[key] = val
+}

@@ -14,7 +14,7 @@
       </template>
     </TableHeader>
 
-    <div >
+    <div class="content">
       <slot></slot>
     </div>
     <Pagination
@@ -34,14 +34,14 @@ import { TableHeaderPropType } from "./types";
 const props = defineProps<{
   editDisabled: boolean;
   deleteDisabled: boolean;
+  pageSize: number;
+  total: number;
+  currentPage?: number;
   searchValue?: string;
   searchPlaceholder?: string;
   dropdownLable?: string;
   dropdownValue?: string;
   dropdownData?: any[];
-  currentPage: number;
-  pageSize: number;
-  total: number;
   background?: boolean;
 }>();
 
@@ -59,5 +59,8 @@ const emit = defineEmits<{
 </script>
 
 <style scoped lang="scss">
-
+  .content{
+    padding: 0 15px;
+    background-color: white;
+  }
 </style>
