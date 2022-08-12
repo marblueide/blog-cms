@@ -49,7 +49,7 @@
           :placeholder="props.searchPlaceholder"
         />
         <div class="table-search-button-group">
-          <el-dropdown>
+          <el-dropdown v-if="dropdownData && dropdownData.length > 0">
             <el-button plain :icon="Grid" />
             <template #dropdown>
               <el-dropdown-menu v-for="it in dropdownData">

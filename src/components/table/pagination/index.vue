@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:15px; background-color: white;">
+  <div class="pagination">
     <el-pagination
     :current-page="currentPage"
     :page-size="pageSize"
@@ -41,4 +41,9 @@ const emit = defineEmits<{
 }>();
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .pagination{
+    padding: 0 15px 15px;
+    background-color: white;
+  }
+</style>

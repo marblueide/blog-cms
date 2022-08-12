@@ -29,6 +29,7 @@ export const useNavTabs = defineStore("navTabs", () => {
       path: route.path,
       name: route.name as string,
       keepAlive: route.meta?.keep == false ? "" : (route.name as string),
+      query:route.meta?.query ?? {}
     };
 
     if (route.children && route.children.length > 0) {

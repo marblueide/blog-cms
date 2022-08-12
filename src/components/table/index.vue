@@ -60,8 +60,8 @@ const emit = defineEmits<{
 </script>
 
 <style scoped lang="scss">
-.content {
-  padding: 0 15px;
-  background-color: white;
-}
+  .content{
+    background-color: white;
+    padding: 15px;
+  }
 </style>

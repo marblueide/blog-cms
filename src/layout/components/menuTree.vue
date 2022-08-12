@@ -24,8 +24,6 @@ import {clickMenu} from "@/utils/router"
 
 const config = useConfig()
 
-console.log(config.layout.menuDefaultIcon)
-
 interface Props {
     menus: viewMenu[]
 }

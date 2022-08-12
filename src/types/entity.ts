@@ -4,15 +4,15 @@ export type Article = {
   viewNum?: number;
   summary?: string;
   content?: string;
-  contentNum: number;
+  contentNum?: number;
   likes?: number;
   weight?: number;
   isPublic?: boolean;
   createTime?: string;
   updateTime?: string;
   tags?: Tag[];
-  // groups?: Group[];
-  // comments: Comment[];
+  groups?: Group[];
+  comments: Comment[];
 };
 
 export type Tag = {
@@ -23,8 +23,8 @@ export type Tag = {
   weight?: number;
   createTime?: string;
   articles?: Article[];
-  // photoWalls?: PhotoWall[];
-  // liveShares?: LiveShared[];
+  photoWalls?: PhotoWall[];
+  liveShares?: LiveShared[];
   // multimedias?: Multimedia[];
 };
 
@@ -52,6 +52,7 @@ export type Comment = {
   content?: string;
   email?: string;
   likes?: number;
+  hasChildren?:boolean
   browser?: string;
   envirconment?: string;
   visible?: boolean;
@@ -59,7 +60,7 @@ export type Comment = {
   article?: Article;
   rootComment?: Comment;
   parentComment?: Comment;
-  childComment?: Comment[];
+  children?: Comment[];
 };
 
 export type LiveShared = {
