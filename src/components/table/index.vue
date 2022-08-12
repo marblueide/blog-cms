@@ -18,11 +18,9 @@
       <slot></slot>
     </div>
     <Pagination
-      :page-size="pageSize"
-      :current-page="currentPage"
-      :total="total"
-      @update:page-size="emit('update:pageSize', $event)"
-      @update:current-page="emit('update:currentPage', $event)"
+      v-bind="props"
+      @size-change="emit('sizeChange', $event)"
+      @current-change="emit('currentChange', $event)"
     />
   </div>
 </template>
@@ -36,14 +34,14 @@ import { TableHeaderPropType } from "./types";
 const props = defineProps<{
   editDisabled: boolean;
   deleteDisabled: boolean;
-  pageSize: number;
-  total: number;
-  currentPage?: number;
   searchValue?: string;
   searchPlaceholder?: string;
   dropdownLable?: string;
   dropdownValue?: string;
   dropdownData?: any[];
+  currentPage: number;
+  pageSize: number;
+  total: number;
   background?: boolean;
 }>();
 
@@ -54,14 +52,11 @@ const emit = defineEmits<{
   (e: "deleteClick"): void;
   (e: "update:searchValue", event: any): void;
   (e: "searchChange", value: string): void;
-  (e: "update:pageSize", sizePage: any): void;
-  (e: "update:currentPage", currentSize: any): void;
+  (e: "sizeChange", sizePage: number): void;
+  (e: "currentChange", currentSize: number): void;
 }>();
 </script>
 
 <style scoped lang="scss">
-.content {
-  padding: 0 15px;
-  background-color: white;
-}
+
 </style>

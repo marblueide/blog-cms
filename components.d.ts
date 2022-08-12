@@ -9,11 +9,9 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
-    ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElContainer: typeof import('element-plus/es')['ElContainer']
-    ElDivider: typeof import('element-plus/es')['ElDivider']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
     ElHeader: typeof import('element-plus/es')['ElHeader']
@@ -27,7 +25,10 @@ declare module '@vue/runtime-core' {
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+<<<<<<< HEAD
     ElTag: typeof import('element-plus/es')['ElTag']
+=======
+>>>>>>> 04e23c9979d345019b4eaa4837f777c488f7f5e0
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     Header: typeof import('./src/components/table/header/index.vue')['default']
     Icon: typeof import('./src/components/icon/index.vue')['default']

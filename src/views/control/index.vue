@@ -1,32 +1,17 @@
 <template>
-  <Table
-    v-bind="prop"
-    v-model:searchValue="searchValue"
-    @searchChange="searchChange"
-  >
-    <template #commonSearch>
-      sdfsdffd
-    </template>
-  </Table>
+ <h1>控制台</h1>
 </template>
 
 <script setup lang="ts">
 import Table from "@/components/table/index.vue";
-import { reactive, ref } from "vue";
+import { reactive, ref, toRefs } from "vue";
 
-const prop = reactive({
-  currentPage: 1,
-  pageSize: 10,
-  total: 100,
-  editDisabled: true,
-  deleteDisabled: true,
-});
+</script>
 
-const searchValue = ref("123");
-
-const searchChange = () => {
-  console.log('searchChange')
-}
+<script lang="ts">
+  export default {
+    name:"control"
+  }
 </script>
 
 <style scoped lang="scss"></style>
