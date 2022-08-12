@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import Table from "@/components/table/index.vue";
-import { reactive, ref, toRefs } from "vue";
+import { reactive, ref } from "vue";
 
 const prop = reactive({
   currentPage: 1,

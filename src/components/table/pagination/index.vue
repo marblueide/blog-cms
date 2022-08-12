@@ -1,14 +1,14 @@
 <template>
   <div style="padding:15px; background-color: white;">
     <el-pagination
-    v-model:currentPage="currentPage"
-    v-model:page-size="pageSize"
+    :current-page="currentPage"
+    :page-size="pageSize"
     :page-sizes="[10, 20, 50, 100]"
     :background="background"
     layout="sizes, ->,,prev, pager, next, jumper"
     :total="total"
-    @size-change="emit('currentChange', $event)"
-    @current-change="emit('sizeChange', $event)"
+    @size-change="emit('update:pageSize', $event)"
+    @current-change="emit('update:currentPage', $event)"
   />
   </div>
 </template>
@@ -36,8 +36,8 @@ const props = defineProps({
 // const { currentPage, pageSize, background, total } = toRefs(props);
 
 const emit = defineEmits<{
-  (e: "sizeChange", sizePage: number): void;
-  (e: "currentChange", currentSize: number): void;
+  (e: "update:pageSize", sizePage: any): void;
+  (e: "update:currentPage", currentSize: any): void;
 }>();
 </script>
 

@@ -4,7 +4,7 @@ import { useNavTabs } from "@/store/navTabs"
 
 export const routes:Array<RouteRecordRaw> = [
   {
-    path:"control",
+    path:"control", 
     name:"control",
     meta:{
       title:"控制台"
@@ -28,12 +28,12 @@ export const routes:Array<RouteRecordRaw> = [
     component:() => import("@/views/article/index.vue"),
     children:[
       {
-        path:"add",
-        name:"addArticle",
+        path:"detail",
+        name:"detailArticle",
         meta:{
-          title:"添加文章",
+          title:"文章详情",
         },
-        component:() => import("@/views/article/add.vue")
+        component:() => import("@/views/article/detail.vue")
       }
     ]
   },

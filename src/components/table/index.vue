@@ -18,9 +18,11 @@
       <slot></slot>
     </div>
     <Pagination
-      v-bind="props"
-      @size-change="emit('sizeChange', $event)"
-      @current-change="emit('currentChange', $event)"
+      :page-size="pageSize"
+      :current-page="currentPage"
+      :total="total"
+      @update:page-size="emit('update:pageSize', $event)"
+      @update:current-page="emit('update:currentPage', $event)"
     />
   </div>
 </template>
@@ -52,15 +54,14 @@ const emit = defineEmits<{
   (e: "deleteClick"): void;
   (e: "update:searchValue", event: any): void;
   (e: "searchChange", value: string): void;
-  (e: "sizeChange", sizePage: number): void;
-  (e: "currentChange", currentSize: number): void;
+  (e: "update:pageSize", sizePage: any): void;
+  (e: "update:currentPage", currentSize: any): void;
 }>();
-
 </script>
 
 <style scoped lang="scss">
-  .content{
-    padding: 0 15px;
-    background-color: white;
-  }
+.content {
+  padding: 0 15px;
+  background-color: white;
+}
 </style>
