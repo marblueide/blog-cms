@@ -15,7 +15,11 @@ export const routes:Array<RouteRecordRaw> = [
     path:"comment",
     name:"comment",
     meta:{
-      title:"评论管理"
+      title:"评论管理",
+      query:{
+        limit:10,
+        offset:1
+      }
     },
     component:() => import("@/views/comment/index.vue")
   },

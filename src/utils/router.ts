@@ -31,6 +31,5 @@ export const routePush = async ({ name, params, query }: viewMenu) => {
       message: "导航失败，路由错误！",
       type: "error",
     });
-    console.error(error);
   }
 };

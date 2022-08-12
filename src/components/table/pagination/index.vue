@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:15px; background-color: white;">
+  <div class="pagination">
     <el-pagination
     v-model:currentPage="currentPage"
     v-model:page-size="pageSize"
@@ -7,8 +7,8 @@
     :background="background"
     layout="sizes, ->,,prev, pager, next, jumper"
     :total="total"
-    @size-change="emit('currentChange', $event)"
-    @current-change="emit('sizeChange', $event)"
+    @size-change="emit('sizeChange', $event)"
+    @current-change="emit('currentChange', $event)"
   />
   </div>
 </template>
@@ -40,4 +40,9 @@ const emit = defineEmits<{
 }>();
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .pagination{
+    padding: 0 15px 15px;
+    background-color: white;
+  }
+</style>

@@ -6,6 +6,12 @@
 
 </script>
 
+<script lang="ts">
+  export default {
+    name:"user"
+  }
+</script>
+
 <style scoped lang="scss">
 
 </style>

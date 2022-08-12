@@ -14,7 +14,7 @@
       </template>
     </TableHeader>
 
-    <div >
+    <div class="content">
       <slot></slot>
     </div>
     <Pagination
@@ -59,5 +59,8 @@ const emit = defineEmits<{
 </script>
 
 <style scoped lang="scss">
-
+  .content{
+    background-color: white;
+    padding: 15px;
+  }
 </style>
