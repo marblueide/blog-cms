@@ -54,8 +54,8 @@ const emit = defineEmits<{
   (e: "deleteClick"): void;
   (e: "update:searchValue", event: any): void;
   (e: "searchChange", value: string): void;
-  (e: "update:pageSize", sizePage: any): void;
-  (e: "update:currentPage", currentSize: any): void;
+  (e: "sizeChange", sizePage: number): void;
+  (e: "currentChange", currentSize: number): void;
 }>();
 </script>
 
