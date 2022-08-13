@@ -34,10 +34,10 @@ import Pagination from "./pagination/index.vue";
 import { TableHeaderPropType } from "./types";
 
 const props = defineProps<{
-  editDisabled: boolean;
-  deleteDisabled: boolean;
-  pageSize: number;
-  total: number;
+  editDisabled?: boolean;
+  deleteDisabled?: boolean;
+  pageSize?: number;
+  total?: number;
   currentPage?: number;
   searchValue?: string;
   searchPlaceholder?: string;
@@ -54,14 +54,14 @@ const emit = defineEmits<{
   (e: "deleteClick"): void;
   (e: "update:searchValue", event: any): void;
   (e: "searchChange", value: string): void;
-  (e: "sizeChange", sizePage: number): void;
-  (e: "currentChange", currentSize: number): void;
+  (e: "update:pageSize", sizePage: any): void;
+  (e: "update:currentPage", currentSize: any): void;
 }>();
 </script>
 
 <style scoped lang="scss">
-  .content{
-    background-color: white;
-    padding: 15px;
-  }
+.content {
+  background-color: white;
+  padding: 15px;
+}
 </style>

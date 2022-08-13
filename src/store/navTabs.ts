@@ -122,5 +122,6 @@ export const useNavTabs = defineStore("navTabs", () => {
     addTabsView,
     setTabsView,
     routeRecordRawToViewMenu,
+    findMenu
   };
 });

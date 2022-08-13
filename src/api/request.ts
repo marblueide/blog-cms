@@ -1,8 +1,11 @@
+import { apolloClient } from "@/utils/apolloClient";
 import { ApolloQueryResult, OperationVariables } from "@apollo/client";
-import { useMutation, useQuery } from "@vue/apollo-composable";
+import { provideApolloClient, useMutation, useQuery } from "@vue/apollo-composable";
 import { DocumentParameter, OptionsParameter } from "@vue/apollo-composable/dist/useQuery";
 import { DocumentNode } from "graphql";
 import _ from "lodash"
+
+provideApolloClient(apolloClient);
 
 export const mutation = <
   TResult = any,

@@ -80,15 +80,17 @@ import _ from "lodash";
 
 const props = withDefaults(
   defineProps<{
-    editDisabled: boolean;
-    deleteDisabled: boolean;
+    editDisabled?: boolean;
+    deleteDisabled?: boolean;
     searchValue?: string;
     searchPlaceholder?: string;
     dropdownLable?: string;
     dropdownValue?: string;
     dropdownData?: any[];
   }>(),
-  {
+  { 
+    editDisabled: true,
+    deleteDisabled: true,
     searchValue: "",
     searchPlaceholder: "请输入内容",
     dropdownLable: "label",

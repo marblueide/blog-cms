@@ -1,13 +1,15 @@
 <template>
   <el-main class="layout-main">
     <el-scrollbar class="layout-main-scrollbar">
-      <router-view v-slot="{ Component }">
-        <transition :name="config.layout.mainAnimation" mode="out-in">
-          <keep-alive :include="state.keepAliveComponentNameList">
-            <component :is="Component" :key="state.componentKey" />
-          </keep-alive>
-        </transition>
-      </router-view>
+      <div style="margin-right: 20px; margin-bottom: 60px;">
+        <router-view v-slot="{ Component }">
+          <transition :name="config.layout.mainAnimation" mode="out-in">
+            <keep-alive :include="state.keepAliveComponentNameList">
+              <component :is="Component" :key="state.componentKey" />
+            </keep-alive>
+          </transition>
+        </router-view>
+      </div>
     </el-scrollbar>
   </el-main>
 </template>
@@ -53,8 +55,19 @@ const addKeepAliveComponentName = (keepAliveName: string) => {
 watch(
   () => route.path,
   () => {
+    console.log(route);
+    if (route.matched.length > 1) {
+      const views = route.matched.slice(1);
+      for (let view of views) {
+        if (!view.name) continue;
+        const curView = navTabs.findMenu(
+          navTabs.state.tabsViewRoutes as viewMenu[],
+          view.name as string
+        );
+        curView?.keepAlive && addKeepAliveComponentName(curView?.keepAlive);
+      }
+    }
     state.componentKey = route.path;
-    addKeepAliveComponentName(navTabs.state.activeRoute?.keepAlive as string);
   }
 );
 </script>
@@ -64,7 +77,7 @@ watch(
   padding: 0 !important;
   overflow: hidden;
   height: 100%;
-  margin: var(--main-space) var(--main-space) 60px var(--main-space);
+  margin: var(--main-space) 0 16px var(--main-space);
 }
 .layout-main-scrollbar {
   width: 100%;

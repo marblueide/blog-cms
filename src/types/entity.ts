@@ -15,9 +15,23 @@ export type Article = {
   comments: Comment[];
 };
 
+export enum TagType {
+  Article = 1,
+  PhotoWall,
+  LiveShared,
+  Multimedia,
+}
+
+export enum TagTypeColor {
+  Article = "primary",
+  PhotoWall = "success",
+  LiveShared = "info",
+  Multimedia = "warning",
+}
+
 export type Tag = {
   id?: string;
-  type?: number;
+  type?: TagType;
   name?: string;
   nameEn?: string;
   weight?: number;
@@ -52,7 +66,7 @@ export type Comment = {
   content?: string;
   email?: string;
   likes?: number;
-  hasChildren?:boolean
+  hasChildren?: boolean;
   browser?: string;
   envirconment?: string;
   visible?: boolean;

@@ -30,9 +30,6 @@ export async function getArticleList(limit: number = 10, offset: number = 0) {
               id
               name
             }
-            comments {
-              id
-            }
           }
         }
       }
@@ -45,5 +42,44 @@ export async function getArticleList(limit: number = 10, offset: number = 0) {
       fetchPolicy: "network-only",
     }
   );
-  return _.cloneDeepWith(res.getArticleList);
+  return res.getArticleList;
+}
+
+export async function getArticleById(id: string) {
+  let res = await query<{
+    getArticleById: Article
+  }>(
+    gql`
+      query GetArticleById($ArticleId: String!) {
+        getArticleById(id: $ArticleId) {
+          id
+          title
+          viewNum
+          summary
+          content
+          contentNum
+          likes
+          weight
+          isPublic
+          createTime
+          updateTime
+          tags {
+            id
+            name
+          }
+          groups {
+            id
+            name
+          }
+        }
+      }
+    `,
+    {
+      ArticleId: id,
+    },
+    {
+      fetchPolicy: "network-only"
+    }
+  );
+  return res.getArticleById
 }

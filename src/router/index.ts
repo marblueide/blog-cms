@@ -24,21 +24,29 @@ export const routes:Array<RouteRecordRaw> = [
     component:() => import("@/views/comment/index.vue")
   },
   {
-    path:"ariticle",
-    name:"ariticle",
+    path:"Article",
+    name:"Article",
     meta:{
       title:"文章管理",
     },
     component:() => import("@/views/article/index.vue"),
     children:[
       {
-        path:"detail",
-        name:"detailArticle",
+        path:"list",
+        name:"listArticle",
         meta:{
-          title:"文章详情",
+          title:"文章列表",
         },
-        component:() => import("@/views/article/detail.vue")
-      }
+        component:() => import("@/views/article/list.vue")
+      },
+      {
+        path:"editor",
+        name:"editorArticle",
+        meta:{
+          title: "文章编辑"
+        },
+        component:() => import("@/views/article/editor.vue")
+      },
     ]
   },
   {
@@ -57,6 +65,14 @@ export const routes:Array<RouteRecordRaw> = [
     },
     component:() => import("@/views/user/index.vue")
   },
+  {
+    path: 'tags',
+    name: 'tags',
+    meta: {
+      title: '标签管理'
+    },
+    component: () => import("@/views/tags/index.vue")
+  }
 ]
 
 //基本路由

@@ -1,15 +1,15 @@
 <template>
   <div class="pagination">
     <el-pagination
-    :current-page="currentPage"
-    :page-size="pageSize"
-    :page-sizes="[10, 20, 50, 100]"
-    :background="background"
-    layout="sizes, ->,,prev, pager, next, jumper"
-    :total="total"
-    @size-change="emit('update:pageSize', $event)"
-    @current-change="emit('update:currentPage', $event)"
-  />
+      :current-page="currentPage"
+      :page-size="pageSize"
+      :page-sizes="[10, 20, 50, 100]"
+      :background="background"
+      layout="sizes, ->,,prev, pager, next, jumper"
+      :total="total"
+      @size-change="emit('update:pageSize', $event)"
+      @current-change="emit('update:currentPage', $event)"
+    />
   </div>
 </template>
 
@@ -18,7 +18,7 @@ import { defineProps, defineEmits, toRefs } from "vue";
 const props = defineProps({
   currentPage: {
     type: Number,
-    default: 1
+    default: 1,
   },
   pageSize: {
     type: Number,
@@ -30,7 +30,8 @@ const props = defineProps({
   },
   total: {
     type: Number,
-  }
+    default: 1,
+  },
 });
 
 // const { currentPage, pageSize, background, total } = toRefs(props);
@@ -42,8 +43,8 @@ const emit = defineEmits<{
 </script>
 
 <style scoped lang="scss">
-  .pagination{
-    padding: 0 15px 15px;
-    background-color: white;
-  }
+.pagination {
+  padding: 0 15px 15px;
+  background-color: white;
+}
 </style>

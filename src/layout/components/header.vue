@@ -1,5 +1,5 @@
 <template>
-  <el-header>
+  <el-header class="header-box">
     <component :is="config.layout.layoutMode + 'NavBar'"></component>
   </el-header>
 </template>
@@ -21,3 +21,9 @@ export default defineComponent({
     components: { DefaultNavBar },
 })
 </script>
+
+<style scoped lang="scss">
+.header-box{
+  background-color: var(--color-bg-1);
+}
+</style>
