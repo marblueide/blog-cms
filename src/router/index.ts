@@ -24,8 +24,8 @@ export const routes:Array<RouteRecordRaw> = [
     component:() => import("@/views/comment/index.vue")
   },
   {
-    path:"ariticle",
-    name:"ariticle",
+    path:"article",
+    name:"Article",
     meta:{
       title:"文章管理",
     },
@@ -56,6 +56,14 @@ export const routes:Array<RouteRecordRaw> = [
       title:"用户管理"
     },
     component:() => import("@/views/user/index.vue")
+  },
+  {
+    path:"type",
+    name:"type",
+    meta:{
+      title:"分类管理"
+    },
+    component:() => import("@/views/type/index.vue")
   },
 ]
 

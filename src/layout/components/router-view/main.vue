@@ -1,13 +1,15 @@
 <template>
   <el-main class="layout-main">
     <el-scrollbar class="layout-main-scrollbar">
-      <router-view v-slot="{ Component }">
-        <transition :name="config.layout.mainAnimation" mode="out-in">
-          <keep-alive :include="state.keepAliveComponentNameList">
-            <component :is="Component" :key="state.componentKey" />
-          </keep-alive>
-        </transition>
-      </router-view>
+      <div style="margin-right: 20px;">
+        <router-view v-slot="{ Component }">
+          <transition :name="config.layout.mainAnimation" mode="out-in">
+            <keep-alive :include="state.keepAliveComponentNameList">
+              <component :is="Component" :key="state.componentKey" />
+            </keep-alive>
+          </transition>
+        </router-view>
+      </div>
     </el-scrollbar>
   </el-main>
 </template>
@@ -64,7 +66,7 @@ watch(
   padding: 0 !important;
   overflow: hidden;
   height: 100%;
-  margin: var(--main-space) var(--main-space) 60px var(--main-space);
+  margin: var(--main-space) 0 60px var(--main-space);
 }
 .layout-main-scrollbar {
   width: 100%;

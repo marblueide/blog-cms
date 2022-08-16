@@ -8,7 +8,7 @@
       v-model:page-size="queryParams.limit"
       :total="tableData?.totalCount || 0"
     >
-      <el-table :data="tableData?.nodes" border v-loading="loading" >
+      <el-table :data="tableData?.nodes" border >
         <el-table-column type="selection" width="55" />
         <el-table-column prop="id" label="id" show-overflow-tooltip />
         <el-table-column prop="title" label="标题" />

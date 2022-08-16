@@ -1,8 +1,12 @@
 <template>
-  <h1>照片墙</h1>
+  <div class="photo">
+    
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+</script>
 
 <script lang="ts">
   export default {
