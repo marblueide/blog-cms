@@ -72,6 +72,22 @@ export const routes:Array<RouteRecordRaw> = [
       title: '标签管理'
     },
     component: () => import("@/views/tags/index.vue")
+  },
+  {
+    path: 'groups',
+    name: 'groups',
+    meta: {
+      title: '分组管理',
+    },
+    component: () => import('@/views/group/index.vue')
+  },
+  {
+    path: 'live_shared',
+    name: 'liveShared',
+    meta: {
+      title: '生活分享管理'
+    },
+    component: () => import('@/views/live-shared/index.vue')
   }
 ]
 

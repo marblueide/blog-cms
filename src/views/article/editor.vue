@@ -95,22 +95,23 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="mr-10" @click="update">修改</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="router.back()">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { getArticleById } from "@/api";
-import { Article, Group, Tag } from "@/types";
-import { ElInput } from "element-plus";
+import { getArticleById, updateArticle } from "@/api";
+import { Article, ArticleUpdateInput, Group, Tag } from "@/types";
+import { ElInput, ElMessage } from "element-plus";
 import { nextTick, reactive, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import MdEditor from "@/components/mdEditor/index.vue";
-import router from "@/router";
+import _ from "lodash";
 
 const route = useRoute();
+const router = useRouter();
 const { id } = route.query;
 
 const form = ref<Article>();
@@ -168,17 +169,35 @@ const tagClose = (index: number, prop: any[] | undefined) => {
 
 const mdEditorUploadImg = (files: File[]) => {
   console.log(files);
-  return files.map(it => {
+  return files.map((it) => {
     return {
       title: it.name,
-      url: URL.createObjectURL(it)
-    }
+      url: URL.createObjectURL(it),
+    };
   });
 };
 
-const update = () => {
-  router.back()
-}
+const update = async () => {
+  if (!form.value?.id) return;
+  const tags = form.value.tags?.map((it) => it.name as string) || [];
+  const groups = form.value.groups?.map((it) => it.name as string) || [];
+  // @ts-ignore
+  let input: ArticleUpdateInput = {
+    ..._.cloneDeep(form.value),
+    tags,
+    groups,
+  };
+  // @ts-ignore
+  delete input.__typename;
+  let res = await updateArticle(input);
+  console.log(res);
+  if (res?.code == 200) {
+    ElMessage({
+      message: "修改成功",
+      type: 'success'
+    });
+  }
+};
 </script>
 
 <script lang="ts">

@@ -4,23 +4,15 @@
       v-bind="queryParams"
       v-model:current-page="queryParams.currentPage"
       v-model:page-size="queryParams.pageSize"
-      @add-click="dialogChange(true, '标签添加', 'add')"
       @refresh-click="getData"
+      @add-click="dialogChange('标签添加', 'add', true)"
     >
       <el-table :data="tableData" border stripe ref="table">
         <el-table-column type="selection" width="55" />
-        <el-table-column type="index" width="50" />
-        <el-table-column prop="id" label="id" show-overflow-tooltip />
+        <el-table-column type="index" label="序号" width="55" />
+        <el-table-column prop="id" label="id" />
         <el-table-column prop="name" label="名称" />
-        <!-- <el-table-column prop="nameEn" label="英文名称" /> -->
-        <el-table-column prop="type" label="类别">
-          <template #default="{ row }">
-            <el-tag :type="getTagColor(row.type)">{{
-              TagType[row.type]
-            }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="weight" label="权重" />
+        <el-table-column prop="nameEn" label="英文名称" />
         <el-table-column prop="createTime" label="创建时间">
           <template #default="{ row }">
             {{ dayjs(+row.createTime).format("YYYY-MM-DD HH:mm:ss") }}
@@ -32,7 +24,7 @@
               type="primary"
               size="small"
               :icon="Edit"
-              @click="dialogChange(true, '标签编辑', 'editor', row)"
+              @click="dialogChange('分组编辑', 'editor', true, row)"
             ></el-button>
             <el-button
               size="small"
@@ -49,7 +41,8 @@
       v-model="dialogTableVisible"
       :title="dialogTitle"
       width="450px"
-      @close="dialogChange(false, '', '')"
+      @close="dialogTableVisible = false"
+      @closed="dialogChange('', '')"
     >
       <el-form :model="form" label-width="80px">
         <el-form-item label="id" v-if="formType === 'editor'">
@@ -61,19 +54,6 @@
         <el-form-item label="名称英文">
           <el-input class="w-96" v-model="form.nameEn"></el-input>
         </el-form-item>
-        <el-form-item label="类别">
-          <el-select v-model="form.type" placeholder="请选择类别" size="large">
-            <el-option
-              v-for="item in TagTypeList"
-              :key="item.value"
-              :label="item.key"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="权重">
-          <el-input-number v-model="form.weight" :min="0" />
-        </el-form-item>
       </el-form>
       <div class="text-center w-full">
         <el-button
@@ -81,30 +61,31 @@
           class="mx-20"
           type="primary"
           @click="update"
-          >提交</el-button
         >
+          提交
+        </el-button>
         <el-button v-else class="mx-20" type="primary" @click="create"
           >创建</el-button
         >
-        <el-button class="mx-20" @click="dialogChange(false, '', '')"
-          >取消</el-button
-        >
+        <el-button class="mx-20" @click="dialogTableVisible = false">
+          取消
+        </el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { createTag, deleteTag, getTagList, updateTag } from "@/api";
-import { computed, reactive, ref } from "vue";
 import Table from "@/components/table/index.vue";
-import { FromType, Tag, TagType, TagTypeColor, TagTypeList } from "@/types";
+import { FromType, Group, GroupUpdateInput } from "@/types";
+import { nextTick, reactive, ref } from "vue";
 import dayjs from "dayjs";
-import { Delete, Edit } from "@element-plus/icons-vue";
 import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
+import { createGroup, deteleGroup, getGroupList, updateGroup } from "@/api";
+import { Delete, Edit } from "@element-plus/icons-vue";
 import _ from "lodash";
 
-const tableData = ref<Tag[]>([]);
+const tableData = ref<Group[]>();
 const table = ref();
 
 const queryParams = reactive({
@@ -113,7 +94,6 @@ const queryParams = reactive({
   total: 0,
   editDisabled: true,
   deleteDisabled: true,
-  type: null,
 });
 
 const getData = async () => {
@@ -123,12 +103,9 @@ const getData = async () => {
       target: table.value.$el,
     });
   } catch (error) {}
-  const offset = queryParams.pageSize * (queryParams.currentPage - 1);
-  let { nodes, totalCount } = await getTagList(
-    queryParams.pageSize,
-    offset,
-    queryParams.type
-  );
+  const { pageSize, currentPage } = queryParams;
+  const offset = pageSize * (currentPage - 1);
+  let { nodes, totalCount } = await getGroupList(pageSize, offset);
   queryParams.total = totalCount;
   tableData.value = nodes;
   console.log(tableData.value);
@@ -136,36 +113,29 @@ const getData = async () => {
 };
 getData();
 
-const getTagColor = computed(() => {
-  return (type: TagType) => {
-    //@ts-ignore
-    return TagTypeColor[TagType[type]];
-  };
-});
-
 const dialogTableVisible = ref(false);
 const dialogTitle = ref("");
 const formType = ref<FromType>();
-const form = ref<Tag>({});
+const form = ref<Group>({});
 
 const reset = () => {
   form.value = {};
 };
 
-const dialogChange = (
-  state: boolean,
+const dialogChange = async (
   title: string,
   type: FromType,
-  tag?: Tag
+  state?: boolean,
+  group?: Group
 ) => {
-  dialogTableVisible.value = state;
+  state && (dialogTableVisible.value = state);
   dialogTitle.value = title;
   formType.value = type;
-  tag && (form.value = tag);
+  group && (form.value = group);
   if (dialogTableVisible.value === false) reset();
 };
 
-const deleted = async (tag: Tag) => {
+const deleted = async (group: Group) => {
   try {
     await ElMessageBox.confirm("确定删除此标签？", "Tip", {
       type: "warning",
@@ -173,8 +143,7 @@ const deleted = async (tag: Tag) => {
       cancelButtonText: "取消",
       center: true,
     });
-    if (!tag.id) return;
-    const res = await deleteTag(tag.id);
+    const res = await deteleGroup(group.id as number);
     if (res?.code === 200) {
       ElMessage({
         message: res.msg,
@@ -186,44 +155,39 @@ const deleted = async (tag: Tag) => {
 };
 
 const update = async () => {
-  try {
-    let data = _.omit(form.value, ['__typename', 'createTime']);
-    const res = await updateTag(data);
-    if (res?.code === 200) {
-      ElMessage({
-        message: res.msg,
-        type: "success",
-      });
-      dialogChange(false, "", "");
-    }
-  } catch (error) {}
+  const data = _.pick(form.value, ["id", "name", "nameEn"]);
+  const res = await updateGroup(data as GroupUpdateInput);
+  if (res?.code === 200) {
+    ElMessage({
+      message: res.msg,
+      type: "success",
+    });
+    dialogTableVisible.value = false;
+    getData();
+  }
 };
 
 const create = async () => {
-  try {
-    const { name, nameEn, type, weight } = form.value;
-    if (!name || !type) {
-      ElMessage({
-        message: "名称或类型为空",
-        type: "info",
-      });
-      return;
-    }
-    let res = await createTag({
-      name,
-      nameEn,
-      type,
-      weight,
+  const { name, nameEn } = form.value;
+  if (!name) {
+    ElMessage({
+      message: "名称为空",
+      type: "info",
     });
-    if (res?.code === 200) {
-      ElMessage({
-        message: res.msg,
-        type: "success",
-      });
-      dialogChange(false, "", "");
-      getData();
-    }
-  } catch (error) {}
+    return;
+  }
+  let res = await createGroup({
+    name,
+    nameEn,
+  });
+  if (res?.code === 200) {
+    ElMessage({
+      message: res.msg,
+      type: "success",
+    });
+    dialogTableVisible.value = false
+    getData()
+  }
 };
 </script>
 

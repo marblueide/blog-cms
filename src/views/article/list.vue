@@ -7,7 +7,13 @@
       v-model:page-size="queryParams.pageSize"
       :total="tableData?.totalCount || 0"
     >
-      <el-table ref="table" :data="tableData?.nodes" border stripe style="width: 100%">
+      <el-table
+        ref="table"
+        :data="tableData?.nodes"
+        border
+        stripe
+        style="width: 100%"
+      >
         <el-table-column type="selection" width="55" />
         <el-table-column type="index" width="50" />
         <el-table-column
@@ -67,8 +73,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="isPublic" label="是否公开" width="100">
-          <template #default="scope">
-            <el-switch v-model="scope.row.isPublic" @change="switchChange" />
+          <template #default="{ row }">
+            <el-switch
+              :model-value="row.isPublic"
+              @change="switchChange($event, row)"
+            />
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150" fixed="right">
@@ -79,7 +88,13 @@
               :icon="Edit"
               @click="editClick($index, row)"
             ></el-button>
-            <el-button size="small" type="danger" :icon="Delete"> </el-button>
+            <el-button
+              size="small"
+              type="danger"
+              :icon="Delete"
+              @click="deleted(row)"
+            >
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -94,12 +109,12 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { getArticleList } from "@/api";
+import { deleteArticle, getArticleList, updateArticle } from "@/api";
 import Table from "@/components/table/index.vue";
 import { Pagination, Article } from "@/types";
 import { ref, reactive, watch } from "vue";
 import _ from "lodash";
-import { ElLoading } from "element-plus";
+import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
 import dayjs from "dayjs";
 import { Delete, Edit } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
@@ -132,7 +147,10 @@ const getList = async () => {
     });
   } catch (error) {}
   const offset = queryParams.pageSize * (queryParams.currentPage - 1);
-  const { nodes, totalCount } = await getArticleList(queryParams.pageSize, offset);
+  const { nodes, totalCount } = await getArticleList(
+    queryParams.pageSize,
+    offset
+  );
   tableData.value = {
     nodes,
     totalCount,
@@ -143,8 +161,16 @@ const getList = async () => {
 
 getList();
 
-const switchChange = (e: boolean) => {
-  console.log(e);
+const switchChange = async (e: boolean, { id }: Article) => {
+  if (!id) return;
+  let res = await updateArticle({ id, isPublic: e });
+  if (res?.code == 200) {
+    ElMessage({
+      message: res.msg,
+      type: "success",
+    });
+    getList();
+  }
 };
 
 const editClick = (index: number, article: Article) => {
@@ -156,6 +182,33 @@ const editClick = (index: number, article: Article) => {
       id,
     },
   });
+};
+
+const deleted = async (article: Article) => {
+  const { id } = article;
+  if (!id) {
+    ElMessage({
+      message: "文章不存在",
+      type: "error",
+    });
+    return;
+  }
+  try {
+    await ElMessageBox.confirm("确定删除此标签？", "Tip", {
+      type: "warning",
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      center: true,
+    });
+    let res = await deleteArticle(id);
+    if (res?.code === 200) {
+      ElMessage({
+        message: res.msg,
+        type: "success",
+      });
+      getList();
+    }
+  } catch (error) {}
 };
 </script>
 

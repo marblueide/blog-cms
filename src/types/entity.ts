@@ -12,7 +12,7 @@ export type Article = {
   updateTime?: string;
   tags?: Tag[];
   groups?: Group[];
-  comments: Comment[];
+  comments?: Comment[];
 };
 
 export enum TagType {
@@ -23,11 +23,30 @@ export enum TagType {
 }
 
 export enum TagTypeColor {
-  Article = "primary",
+  Article = "",
   PhotoWall = "success",
-  LiveShared = "info",
-  Multimedia = "warning",
+  LiveShared = "warning",
+  Multimedia = "danger",
 }
+
+export const TagTypeList = [
+  {
+    key: "Article",
+    value: 1,
+  },
+  {
+    key: "PhotoWall",
+    value: 2,
+  },
+  {
+    key: "LiveShared",
+    value: 3,
+  },
+  {
+    key: "Multimedia",
+    value: 4,
+  },
+];
 
 export type Tag = {
   id?: string;
@@ -43,7 +62,7 @@ export type Tag = {
 };
 
 export type Group = {
-  id?: string;
+  id?: number;
   name?: string;
   nameEn?: string;
   createTime?: string;

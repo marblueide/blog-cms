@@ -11,7 +11,7 @@ const headers:Headers = {
 }
 
 const upLoadLink = createUploadLink({
-  uri:"http://localhost:3000/graphql",
+  uri: import.meta.env.VITE_BASE_API_GRAPHQL,
   headers
 })
 

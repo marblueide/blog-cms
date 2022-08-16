@@ -1,7 +1,7 @@
-import { Tag, TagType } from "@/types";
-import { Pagination } from "@/types/common";
+import { Tag, TagsCreateInput, TagType } from "@/types";
+import { Pagination, StatusModel } from "@/types/common";
 import gql from "graphql-tag";
-import { query } from "../request";
+import { mutation, query } from "../request";
 
 export async function getTagList(
   limit: number = 10,
@@ -38,4 +38,82 @@ export async function getTagList(
     }
   );
   return res.getTagsList;
+}
+
+export async function createTag(input: TagsCreateInput) {
+  try {
+    const res = await mutation<
+      {
+        createTag: StatusModel;
+      },
+      {
+        input: TagsCreateInput;
+      }
+    >(
+      gql`
+        mutation CreateTag($input: TagsCreateInput!) {
+          createTag(input: $input) {
+            code
+            msg
+          }
+        }
+      `,
+      {
+        input,
+      }
+    );
+    return res?.createTag;
+  } catch (error) {}
+}
+
+export async function deleteTag(id: string) {
+  const res = await mutation<
+    {
+      deleteTag: StatusModel;
+    },
+    {
+      deleteTagId: string;
+    }
+  >(
+    gql`
+      mutation ($deleteTagId: String!) {
+        deleteTag(id: $deleteTagId) {
+          code
+          msg
+        }
+      }
+    `,
+    {
+      deleteTagId: id,
+    }
+  );
+
+  return res?.deleteTag;
+}
+
+export async function updateTag(tag: Tag) {
+  try {
+    const res = await mutation<
+      {
+        updateTag: StatusModel;
+      },
+      {
+        updateTagInput: Tag;
+      }
+    >(
+      gql`
+        mutation ($updateTagInput: TagsUpdateInput!) {
+          updateTag(input: $updateTagInput) {
+            code
+            msg
+          }
+        }
+      `,
+      {
+        updateTagInput: tag,
+      }
+    );
+
+    return res?.updateTag;
+  } catch (error) {}
 }
