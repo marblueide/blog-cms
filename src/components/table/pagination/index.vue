@@ -34,8 +34,6 @@ const props = defineProps({
   },
 });
 
-// const { currentPage, pageSize, background, total } = toRefs(props);
-
 const emit = defineEmits<{
   (e: "update:pageSize", sizePage: any): void;
   (e: "update:currentPage", currentSize: any): void;

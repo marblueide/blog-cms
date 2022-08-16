@@ -16,15 +16,10 @@ export const getCommnet = async (offset: number = 1, limit: number = 10) => {
             visible
             hasChildren
             createTime
+            type
             article {
               id
               title
-            }
-            rootComment {
-              id
-            }
-            parentComment {
-              id
             }
             children: childComment {
               id
@@ -34,10 +29,8 @@ export const getCommnet = async (offset: number = 1, limit: number = 10) => {
               likes
               visible
               createTime
+              type
               article {
-                id
-              }
-              rootComment {
                 id
               }
               parentComment {
@@ -54,12 +47,15 @@ export const getCommnet = async (offset: number = 1, limit: number = 10) => {
         offset: offset - 1,
         limit,
       },
+    },
+    {
+      fetchPolicy: "cache-and-network",
     }
   );
 };
 
 export const switchCommentVisible = async (id: string, visible: boolean) => {
-  const mutate = mutation<
+  return mutation<
     {
       updateComment: StatusModel;
     },
@@ -69,19 +65,43 @@ export const switchCommentVisible = async (id: string, visible: boolean) => {
         visible: boolean;
       };
     }
-  >(gql`
-    mutation switchCommentVisible($update: updateCommentInput!) {
-      updateComment(comment: $update) {
-        code
-        msg
+  >(
+    gql`
+      mutation switchCommentVisible($update: updateCommentInput!) {
+        updateComment(comment: $update) {
+          code
+          msg
+        }
       }
+    `,
+    {
+      update: {
+        id,
+        visible,
+      },
     }
-  `);
-  try {
-    let res = await mutate({update:{id,visible}});
-    return res?.data?.updateComment
-  } catch (error) {
-    console.log(error)
-  }
-  
+  );
+};
+
+export const deleteComment = async (id: string) => {
+  return mutation<
+    {
+      deleteComment: StatusModel;
+    },
+    {
+      deleteCommentId: string;
+    }
+  >(
+    gql`
+      mutation ($deleteCommentId: String!) {
+        deleteComment(id: $deleteCommentId) {
+          code
+          msg
+        }
+      }
+    `,
+    {
+      deleteCommentId: id,
+    }
+  );
 };

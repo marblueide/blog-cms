@@ -76,7 +76,8 @@ export type PhotoWall = {
   originUrl?: string;
   author?: string;
   createTime?: string;
-  tags: Tag[];
+  tags?:Tag[];
+  type?:Type
 };
 
 export type Comment = {
@@ -94,7 +95,13 @@ export type Comment = {
   rootComment?: Comment;
   parentComment?: Comment;
   children?: Comment[];
+  type?:CommentTypeEnum
 };
+
+export enum CommentTypeEnum {
+  article,
+  commnet
+}
 
 export type LiveShared = {
   id?: string;
@@ -107,3 +114,14 @@ export type LiveShared = {
   updateTime?: string;
   tags: Tag[];
 };
+
+
+export type Type = {
+  id?: string;
+  name?: string;
+  createTime?:string
+  rootType?: Type;
+  parentType?: Type;
+  childType?: Type[];
+  hasChildren?: boolean;
+}

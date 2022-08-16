@@ -66,6 +66,14 @@ export const routes:Array<RouteRecordRaw> = [
     component:() => import("@/views/user/index.vue")
   },
   {
+    path:"type",
+    name:"type",
+    meta:{
+      title:"分类管理"
+    },
+    component:() => import("@/views/type/index.vue")
+  },
+  {
     path: 'tags',
     name: 'tags',
     meta: {
