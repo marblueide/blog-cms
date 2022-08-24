@@ -44,7 +44,7 @@ export const getCommnet = async (offset: number = 1, limit: number = 10) => {
     `,
     {
       input: {
-        offset: offset - 1,
+        offset,
         limit,
       },
     },

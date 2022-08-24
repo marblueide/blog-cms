@@ -13,6 +13,13 @@
         <el-table-column prop="id" label="id" />
         <el-table-column prop="name" label="名称" />
         <el-table-column prop="nameEn" label="英文名称" />
+        <el-table-column label="文章列表">
+          <template #default="{row}">
+            <el-tag v-for="it in row.articles" class="mr-2 pointer">
+              {{it.title}}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="创建时间">
           <template #default="{ row }">
             {{ dayjs(+row.createTime).format("YYYY-MM-DD HH:mm:ss") }}
@@ -108,7 +115,6 @@ const getData = async () => {
   let { nodes, totalCount } = await getGroupList(pageSize, offset);
   queryParams.total = totalCount;
   tableData.value = nodes;
-  console.log(tableData.value);
   loadingInstance?.close();
 };
 getData();

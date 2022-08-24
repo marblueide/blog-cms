@@ -92,7 +92,7 @@ import {Delete} from "@element-plus/icons-vue"
 const route = useRoute();
 const router = useRouter();
 const prop = reactive({
-  currentPage: +route.query.offset! || 1,
+  currentPage: +route.query.page! || 1,
   pageSize: +route.query.limit! || 10,
   total: 100,
   editDisabled: true,
@@ -102,7 +102,8 @@ const searchValue = ref("");
 const tableData = ref<Comment[]>([]);
 
 const getData = async () => {
-  let res = await getCommnet(prop.currentPage, prop.pageSize);
+  const {currentPage,pageSize} = prop
+  let res = await getCommnet(pageSize * (currentPage - 1), prop.pageSize);
   tableData.value = res.getCommentByRoot.nodes as Comment[];
   prop.total = res.getCommentByRoot.totalCount;
 };
@@ -118,7 +119,6 @@ const visibleChange = async (id: string, val: boolean) => {
 };
 
 const typeToString = (comment: Comment) => {
-  console.log(comment.content, comment.parentComment);
   if (comment.type == CommentTypeEnum.article) {
     return "文章评论" + (comment.parentComment ? "[回复]" : "");
   } else if (comment.type == CommentTypeEnum.commnet) {
@@ -135,7 +135,7 @@ let unOffsetAndLimit = watch(
     router.replace({
       query: {
         limit: size,
-        offset: page,
+        page: page,
       },
     });
     getData();

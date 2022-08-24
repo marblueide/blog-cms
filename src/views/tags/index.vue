@@ -131,7 +131,6 @@ const getData = async () => {
   );
   queryParams.total = totalCount;
   tableData.value = nodes;
-  console.log(tableData.value);
   loadingInstance?.close();
 };
 getData();

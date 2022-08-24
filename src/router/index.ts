@@ -96,7 +96,15 @@ export const routes:Array<RouteRecordRaw> = [
       title: '生活分享管理'
     },
     component: () => import('@/views/live-shared/index.vue')
-  }
+  },
+  {
+    path: 'friends_Chain',
+    name: 'friendsChain',
+    meta: {
+      title: '友链管理'
+    },
+    component: () => import('@/views/friendsChain/index.vue')
+  },
 ]
 
 //基本路由

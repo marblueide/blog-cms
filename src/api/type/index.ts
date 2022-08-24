@@ -60,7 +60,7 @@ export const getType = async (offset: number = 1, limit: number = 10) => {
     {
       getTypeByRootInput2: {
         limit,
-        offset: offset - 1,
+        offset: offset,
       },
     },
     {
@@ -92,7 +92,7 @@ export const deleteType = async (id: string) => {
   );
 };
 
-export const createType = async ({name,parentType,rootType}: Type) => {
+export const createType = async ({ name, parentType, rootType }: Type) => {
   return await mutation<{
     createType: StatusModel;
   }>(
@@ -107,16 +107,16 @@ export const createType = async ({name,parentType,rootType}: Type) => {
     {
       input: {
         name,
-        parentType:parentType?.id ?? null,
-        rootType:rootType?.id ?? null
+        parentType: parentType?.id ?? null,
+        rootType: rootType?.id ?? null,
       },
     }
   );
 };
 
-export const updateType = async ({name,id}: Type) => {
+export const updateType = async ({ name, id }: Type) => {
   return await mutation<{
-    updateType:StatusModel
+    updateType: StatusModel;
   }>(
     gql`
       mutation updateType($input: updateTypeInput!) {
@@ -127,10 +127,39 @@ export const updateType = async ({name,id}: Type) => {
       }
     `,
     {
-      input:{
+      input: {
         name,
-        id
+        id,
+      },
+    }
+  );
+};
+
+export const getTypeByName = async (name: string) => {
+  return await query<{
+    getTypeByNameAndRoot: Type;
+  }>(
+    gql`
+      query getTypeByName($name: String!) {
+        getTypeByNameAndRoot(name: $name) {
+          id
+          name
+          childType {
+            id
+            name
+            childType {
+              id
+              name
+            }
+          }
+        }
       }
+    `,
+    {
+      name,
+    },
+    {
+      fetchPolicy:"cache-and-network"
     }
   );
 };

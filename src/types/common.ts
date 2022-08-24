@@ -10,3 +10,9 @@ export type StatusModel = {
 }
 
 export type FromType = 'add' | 'editor' | ''
+
+export type Label = {
+  value:string,
+  label:string,
+  children:Label[]
+}

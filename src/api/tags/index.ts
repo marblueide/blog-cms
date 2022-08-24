@@ -117,3 +117,24 @@ export async function updateTag(tag: Tag) {
     return res?.updateTag;
   } catch (error) {}
 }
+
+export async function getTagByNameVague(name: string) {
+  return await query<{
+    getTagByVagueName:Tag[]
+  }>(
+    gql`
+      query getTagByVo($name: String!) {
+        getTagByVagueName(name: $name) {
+          id
+          value:name
+        }
+      }
+    `,
+    {
+      name
+    },
+    {
+      fetchPolicy:"cache-and-network"
+    }
+  );
+}

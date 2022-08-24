@@ -156,7 +156,6 @@ const getList = async () => {
     totalCount,
   };
   loadingInstance?.close();
-  console.log(tableData.value);
 };
 
 getList();
@@ -174,7 +173,6 @@ const switchChange = async (e: boolean, { id }: Article) => {
 };
 
 const editClick = (index: number, article: Article) => {
-  console.log(index, article);
   const { id } = article;
   router.push({
     name: "editorArticle",

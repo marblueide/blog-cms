@@ -125,3 +125,10 @@ export type Type = {
   childType?: Type[];
   hasChildren?: boolean;
 }
+
+export type FriendsChain = {
+  id?:string
+  name?:string
+  link?:string
+  imgSrc?:string
+}

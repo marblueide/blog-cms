@@ -118,7 +118,7 @@ const form = ref<Article>();
 const getData = async (id: string) => {
   if (!id) return;
   form.value = await getArticleById(id);
-  console.log(form.value);
+  
 };
 getData(id as string);
 
@@ -168,7 +168,6 @@ const tagClose = (index: number, prop: any[] | undefined) => {
 };
 
 const mdEditorUploadImg = (files: File[]) => {
-  console.log(files);
   return files.map((it) => {
     return {
       title: it.name,
@@ -190,7 +189,6 @@ const update = async () => {
   // @ts-ignore
   delete input.__typename;
   let res = await updateArticle(input);
-  console.log(res);
   if (res?.code == 200) {
     ElMessage({
       message: "修改成功",

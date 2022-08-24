@@ -73,13 +73,12 @@ const getList = async () => {
     totalCount,
   };
   loading.value = false
-  console.log(tableData.value)
 };
 
 getList();
 
 const switchChange = (e: boolean) => {
-  console.log(e);
+  
 };
 </script>
 

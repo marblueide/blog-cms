@@ -55,7 +55,6 @@ const addKeepAliveComponentName = (keepAliveName: string) => {
 watch(
   () => route.path,
   () => {
-    console.log(route);
     if (route.matched.length > 1) {
       const views = route.matched.slice(1);
       for (let view of views) {

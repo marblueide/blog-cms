@@ -66,7 +66,7 @@
     <el-dialog
       v-model="dialogStatus.visible"
       :title="dialogStatus.title"
-      width="450px"
+      width="500px"
     >
       <el-form :model="form" label-width="80px">
         <el-form-item label="id" v-if="dialogStatus.type === 'edit'">
@@ -105,7 +105,7 @@ const prop = reactive({
   editDisabled: true,
   deleteDisabled: true,
   total: 100,
-  currentPage: +route.query.offset! || 1,
+  currentPage: +route.query.page! || 1,
   pageSize: +route.query.limit! || 10,
 });
 
@@ -176,7 +176,8 @@ const handleConfirm = async () => {
 };
 
 const getData = async () => {
-  const res = await getType(prop.currentPage, prop.pageSize);
+  const {pageSize,currentPage} = prop
+  const res = await getType(pageSize * (currentPage - 1) , prop.pageSize);
   tableData.value = res.getTypeByRoot.nodes;
   prop.total = res.getTypeByRoot.totalCount;
 };
@@ -190,7 +191,7 @@ let unOffsetAndLimit = watch(
     router.replace({
       query: {
         limit: size,
-        offset: page,
+        page: page,
       },
     });
     getData();
