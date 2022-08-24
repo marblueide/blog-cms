@@ -72,6 +72,10 @@
   .w-#{$i} {
     width: #{0.25 * $i}rem !important;
   }
+
+  .h-#{$i} {
+    height: #{0.25 * $i}rem !important;
+  }
 }
 
 @for $i from 1 through 20 {
@@ -178,4 +182,8 @@
 
 .w-50 {
   width: 50% !important;
+}
+
+.pointer{
+  cursor: pointer;
 }

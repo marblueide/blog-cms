@@ -49,6 +49,37 @@ export async function getLiveSharedList(
   return res.getLiveSharedList;
 }
 
+export async function getLiveSharedById(id: string) {
+  const res = await query<{
+    getLiveSharedById: LiveShared;
+  }>(
+    gql`
+      query ($id: String!) {
+        getLiveSharedById(id: $id) {
+          id
+          content
+          address
+          emotion
+          illustration
+          weight
+          tags {
+            id
+            name
+          }
+        }
+      }
+    `,
+    {
+      id
+    },
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+
+  return res.getLiveSharedById;
+}
+
 export async function createLiveShared(input: LiveSharedCreateInput) {
   const res = await mutation<
     {
@@ -83,8 +114,8 @@ export async function updateLiveShared(input: LiveSharedUpdateInput) {
     }
   >(
     gql`
-      mutation ($updateLiveShared: UpdateLiveSharedInput!) {
-        updateLiveShared(updateLiveShared: $updateLiveShared) {
+      mutation ($input: UpdateLiveSharedInput!) {
+        updateLiveShared(updateLiveShared: $input) {
           code
           msg
         }
