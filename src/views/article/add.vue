@@ -1,10 +1,13 @@
 <template>
   <div class="editor-container">
-    <el-form :model="form" label-width="90px" v-if="form">
-      <el-form-item label="id">
-        <el-input v-model="form.id" class="w-96" disabled />
-      </el-form-item>
-      <el-form-item label="标题">
+    <el-form
+      ref="ruleFormRef"
+      :model="form"
+      :rules="rules"
+      label-width="90px"
+      v-if="form"
+    >
+      <el-form-item label="标题" prop="title">
         <el-input v-model="form.title" class="w-96" />
       </el-form-item>
       <el-form-item label="封面图">
@@ -103,7 +106,9 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="mr-10" @click="update">修改</el-button>
+        <el-button type="primary" class="mr-10" @click="submit(ruleFormRef)"
+          >添加</el-button
+        >
         <el-button @click="router.back()">取消</el-button>
       </el-form-item>
     </el-form>
@@ -111,36 +116,43 @@
 </template>
 
 <script lang="ts" setup>
-import { getArticleById, updateArticle } from "@/api";
-import { Article, ArticleUpdateInput, Group, Tag } from "@/types";
-import { ElInput, ElMessage, UploadUserFile } from "element-plus";
+import { createArticle } from "@/api";
+import { Article, ArticleCreateInput } from "@/types";
+import {
+  ElInput,
+  ElMessage,
+  FormInstance,
+  FormRules,
+  UploadUserFile,
+} from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { nextTick, onActivated, reactive, ref } from "vue";
+import { nextTick, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import MdEditor from "@/components/mdEditor/index.vue";
 import _ from "lodash";
 
-const route = useRoute();
 const router = useRouter();
 
-const form = ref<Article>();
-const fileList = ref<UploadUserFile[]>([]);
-const getData = async (id: string) => {
-  if (!id) return;
-  form.value = await getArticleById(id);
-  if (form.value.pic) {
-    fileList.value.push({
-      name: form.value.pic,
-      url: import.meta.env.VITE_BASE_IMG_ADDRESS + form.value.pic,
-    });
-  }
-};
-
-onActivated(() => {
-  const { id } = route.query;
-  fileList.value = [];
-  getData(id as string);
+const form = ref<Article>({
+  title: "",
+  weight: 0,
+  summary: "",
+  content: "",
+  isPublic: false,
+  tags: [],
+  groups: [],
 });
+const ruleFormRef = ref<FormInstance>();
+const rules = reactive<FormRules>({
+  title: [
+    {
+      required: true,
+      message: "标题不为空",
+      trigger: "blur",
+    },
+  ],
+});
+const fileList = ref<UploadUserFile[]>([]);
 
 const tagInputVisible = ref(false);
 const tagInputValue = ref("");
@@ -196,26 +208,47 @@ const mdEditorUploadImg = (files: File[]) => {
   });
 };
 
-const update = async () => {
-  if (!form.value?.id) return;
+const reset = () => {
+  form.value = {
+    title: "",
+    weight: 0,
+    summary: "",
+    content: "",
+    isPublic: false,
+    tags: [],
+    groups: [],
+  };
+};
+
+const submit = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      create();
+    } else {
+      console.log("error submit!", fields);
+    }
+  });
+};
+
+const create = async () => {
   const tags = form.value.tags?.map((it) => it.name as string) || [];
   const groups = form.value.groups?.map((it) => it.name as string) || [];
-  // @ts-ignore
-  let input: ArticleUpdateInput = {
-    ..._.omit(form.value, ["pic", "__typename"]),
+  let input: ArticleCreateInput = {
+    ...form.value,
     tags,
     groups,
   };
   if (fileList.value[0]?.raw) {
     input.file = fileList.value[0].raw;
   }
-  let res = await updateArticle(input);
+  let res = await createArticle(input);
   if (res?.code == 200) {
     ElMessage({
-      message: "修改成功",
+      message: res.msg,
       type: "success",
     });
-    form.value = undefined;
+    reset()
     router.back();
   }
 };
@@ -223,7 +256,7 @@ const update = async () => {
 
 <script lang="ts">
 export default {
-  name: "editorArticle",
+  name: "addArticle",
 };
 </script>
 
