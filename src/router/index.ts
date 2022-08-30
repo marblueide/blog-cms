@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NProgress from "nprogress";
 import { useNavTabs } from "@/store/navTabs";
 
-export const routes: Array<RouteRecordRaw> = [
+export const routes:Array<RouteRecordRaw> = [
   {
     path: "control",
     name: "control",
@@ -130,7 +130,7 @@ export const routes: Array<RouteRecordRaw> = [
       title: '友链管理'
     },
     component: () => import('@/views/friendsChain/index.vue')
-  },,
+  },
 ];
 
 //基本路由
@@ -143,7 +143,7 @@ export const baseRoutes: Array<RouteRecordRaw> = [
     meta: {
       title: "首页",
     },
-    children: routes,
+    children: routes as any,
   },
 ];
 
