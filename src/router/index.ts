@@ -47,6 +47,14 @@ export const routes: Array<RouteRecordRaw> = [
         },
         component: () => import("@/views/article/editor.vue"),
       },
+      {
+        path: "add",
+        name: "addArticle",
+        meta: {
+          title: "添加文章",
+        },
+        component: () => import("@/views/article/add.vue"),
+      },
     ],
   },
   {
@@ -95,6 +103,14 @@ export const routes: Array<RouteRecordRaw> = [
     meta: {
       title: '标签管理'
     },
+    component: () => import("@/views/tags/index.vue")
+  },
+  {
+    path: 'liveShared',
+    name: 'liveShared',
+    meta: {
+      title: '生活分享'
+    },
     component: () => import("@/views/live-shared/index.vue"),
     children: [
       {
@@ -130,7 +146,7 @@ export const routes: Array<RouteRecordRaw> = [
       title: '友链管理'
     },
     component: () => import('@/views/friendsChain/index.vue')
-  },,
+  },
 ];
 
 //基本路由

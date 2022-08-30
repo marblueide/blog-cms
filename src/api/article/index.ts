@@ -1,4 +1,4 @@
-import { Article, ArticleUpdateInput } from "@/types";
+import { Article, ArticleCreateInput, ArticleUpdateInput } from "@/types";
 import { Pagination, StatusModel } from "@/types/common";
 import gql from "graphql-tag";
 import _ from "lodash";
@@ -13,6 +13,7 @@ export async function getArticleList(limit: number = 10, offset: number = 0) {
           nodes {
             id
             title
+            pic
             viewNum
             summary
             content
@@ -58,6 +59,7 @@ export async function getArticleById(id: string) {
           content
           weight
           isPublic
+          pic
           tags {
             id
             name
@@ -102,6 +104,32 @@ export async function updateArticle(article: ArticleUpdateInput) {
       }
     );
     return res?.updateArticle;
+  } catch (error) {}
+}
+
+export async function createArticle(article: ArticleCreateInput) {
+  try {
+    let res = await mutation<
+      {
+        createArticle: StatusModel;
+      },
+      {
+        input: ArticleCreateInput;
+      }
+    >(
+      gql`
+        mutation CreateArticle($input: ArticleInsertInput!) {
+          createArticle(articleInsertInput: $input) {
+            code
+            msg
+          }
+        }
+      `,
+      {
+        input: article,
+      }
+    );
+    return res?.createArticle;
   } catch (error) {}
 }
 

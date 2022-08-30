@@ -6,6 +6,7 @@
       v-model:current-page="queryParams.currentPage"
       v-model:page-size="queryParams.pageSize"
       :total="tableData?.totalCount || 0"
+      @add-click="router.push({ name: 'addArticle' })"
     >
       <el-table
         ref="table"
@@ -28,24 +29,35 @@
           show-overflow-tooltip
           width="150"
         />
+        <el-table-column prop="pic" label="封面图" width="150">
+          <template #default="{ row }">
+            <div v-if="row.pic">
+              <el-image
+                style="width: 100px"
+                :src="img_address + row.pic"
+                fit="cover"
+              />
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column prop="summary" label="前言" width="150">
-          <template #default="scope">
-            <span class="ellipsis-3">{{ scope.row.summary }}</span>
+          <template #default="{ row }">
+            <span class="ellipsis-3">{{ row.summary }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="content" label="内容" width="150">
-          <template #default="scope">
-            <span class="ellipsis-3">{{ scope.row.content }}</span>
+          <template #default="{ row }">
+            <span class="ellipsis-3">{{ row.content }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="contentNum" label="字数" />
         <el-table-column prop="likes" label="点赞数" />
         <el-table-column prop="viewNum" label="观看数" />
         <el-table-column prop="tags" label="标签" min-width="160">
-          <template #default="scope">
+          <template #default="{ row }">
             <el-tag
               class="ml-2"
-              v-for="it in scope.row.tags"
+              v-for="it in row.tags"
               :key="it.id"
               type="success"
               >{{ it.name }}</el-tag
@@ -121,6 +133,7 @@ import { useRouter } from "vue-router";
 
 const table = ref();
 const router = useRouter();
+const img_address = import.meta.env.VITE_BASE_IMG_ADDRESS;
 
 const tableData = ref<Pagination<Article>>({
   nodes: [],

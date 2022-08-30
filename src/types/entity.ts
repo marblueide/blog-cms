@@ -1,6 +1,7 @@
 export type Article = {
   id?: string;
   title?: string;
+  pic?: string;
   viewNum?: number;
   summary?: string;
   content?: string;

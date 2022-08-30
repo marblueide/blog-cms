@@ -226,6 +226,12 @@ const create = async () => {
 };
 </script>
 
+<script lang="ts">
+  export default {
+    name: 'tags'
+  }
+</script>
+
 <style lang="scss" scoped>
 .el-table :deep(.cell) {
   text-align: center;
