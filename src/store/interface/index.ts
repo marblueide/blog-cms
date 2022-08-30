@@ -1,3 +1,4 @@
+import { anyObj } from "@/types/global"
 import type { Component } from "vue"
 
 export interface Layout {
@@ -29,6 +30,7 @@ export interface viewMenu {
   type?: string
   icon?: string
   keepAlive?: string
+  show?:boolean
   query?: anyObj
   params?: anyObj
   children?: viewMenu[]

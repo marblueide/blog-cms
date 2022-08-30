@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NProgress from "nprogress";
 import { useNavTabs } from "@/store/navTabs";
 
-export const routes:Array<RouteRecordRaw> = [
+export const routes: Array<RouteRecordRaw> = [
   {
     path: "control",
     name: "control",
@@ -44,6 +44,7 @@ export const routes:Array<RouteRecordRaw> = [
         name: "editorArticle",
         meta: {
           title: "文章编辑",
+          show: false,
         },
         component: () => import("@/views/article/editor.vue"),
       },
@@ -74,42 +75,26 @@ export const routes:Array<RouteRecordRaw> = [
     component: () => import("@/views/user/index.vue"),
   },
   {
-    path:"photo",
-    name:"photo",
-    meta:{
-      title:"图片管理"
-    },
-    component:() => import("@/views/photo/index.vue")
-  },
-  {
-    path:"user",
-    name:"user",
-    meta:{
-      title:"用户管理"
-    },
-    component:() => import("@/views/user/index.vue")
-  },
-  {
-    path:"type",
-    name:"type",
-    meta:{
-      title:"分类管理"
-    },
-    component:() => import("@/views/type/index.vue")
-  },
-  {
-    path: 'tags',
-    name: 'tags',
+    path: "type",
+    name: "type",
     meta: {
-      title: '标签管理'
+      title: "分类管理",
     },
-    component: () => import("@/views/tags/index.vue")
+    component: () => import("@/views/type/index.vue"),
   },
   {
-    path: 'liveShared',
-    name: 'liveShared',
+    path: "tags",
+    name: "tags",
     meta: {
-      title: '生活分享'
+      title: "标签管理",
+    },
+    component: () => import("@/views/tags/index.vue"),
+  },
+  {
+    path: "liveShared",
+    name: "liveShared",
+    meta: {
+      title: "生活分享",
     },
     component: () => import("@/views/live-shared/index.vue"),
     children: [
@@ -140,12 +125,12 @@ export const routes:Array<RouteRecordRaw> = [
     ],
   },
   {
-    path: 'friends_Chain',
-    name: 'friendsChain',
+    path: "friends_Chain",
+    name: "friendsChain",
     meta: {
-      title: '友链管理'
+      title: "友链管理",
     },
-    component: () => import('@/views/friendsChain/index.vue')
+    component: () => import("@/views/friendsChain/index.vue"),
   },
 ];
 

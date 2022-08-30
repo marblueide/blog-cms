@@ -40,7 +40,7 @@ export async function getArticleList(limit: number = 10, offset: number = 0) {
       offset,
     },
     {
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "network-only",
     }
   );
   return res.getArticleList;

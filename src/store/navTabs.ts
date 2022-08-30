@@ -1,3 +1,4 @@
+import { anyObj } from "@/types/global";
 import { defineStore } from "pinia";
 import { reactive } from "vue";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
@@ -10,7 +11,6 @@ export const useNavTabs = defineStore("navTabs", () => {
     // tab列表
     tabsView: [],
     tabFullScreen: false,
-    // 从后台加载到的菜单路由列表
     tabsViewRoutes: [],
     authNode: new Map(),
   });
@@ -29,7 +29,8 @@ export const useNavTabs = defineStore("navTabs", () => {
       path: route.path,
       name: route.name as string,
       keepAlive: route.meta?.keep == false ? "" : (route.name as string),
-      query:route.meta?.query ?? {}
+      query: (route.meta?.query ?? {}) as anyObj,
+      show: (route.meta?.show ?? true) as boolean,
     };
 
     if (route.children && route.children.length > 0) {
@@ -122,6 +123,6 @@ export const useNavTabs = defineStore("navTabs", () => {
     addTabsView,
     setTabsView,
     routeRecordRawToViewMenu,
-    findMenu
+    findMenu,
   };
 });
