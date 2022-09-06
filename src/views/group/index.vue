@@ -12,11 +12,34 @@
         <el-table-column type="index" label="序号" width="55" />
         <el-table-column prop="id" label="id" />
         <el-table-column prop="name" label="名称" />
-        <el-table-column prop="nameEn" label="英文名称" />
+        <el-table-column label="封面图">
+          <template #default="{ row }">
+            <el-image
+              style="width: 150px;"
+              :src="IMG_ADDRESS + row.pic"
+              :preview-src-list="[IMG_ADDRESS + row.pic]"
+              hide-on-click-modal
+              fit="cover"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column prop="describe" label="描述信息">
+          <template #default="{ row }">
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              :content="row.describe"
+              placement="top"
+            >
+              <span class="ellipsis-3">{{ row.describe }}</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
         <el-table-column label="文章列表">
-          <template #default="{row}">
+          <template #default="{ row }">
             <el-tag v-for="it in row.articles" class="mr-2 pointer">
-              {{it.title}}
+              {{ it.title }}
             </el-tag>
           </template>
         </el-table-column>
@@ -61,8 +84,28 @@
         <el-form-item label="名称英文">
           <el-input class="w-96" v-model="form.nameEn"></el-input>
         </el-form-item>
+        <el-form-item label="描述信息">
+          <el-input
+            class="w-96"
+            type="textarea"
+            v-model="form.describe"
+            :rows="4"
+            placeholder="请输入描述信息"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="封面图">
+          <el-upload
+            class="avatar-uploader"
+            list-type="picture-card"
+            v-model:file-list="fileList"
+            :auto-upload="false"
+            :limit="1"
+          >
+            <el-icon><Plus /></el-icon>
+          </el-upload>
+        </el-form-item>
       </el-form>
-      <div class="text-center w-full">
+      <div class="text-center w-full mt-10">
         <el-button
           v-if="formType == 'editor'"
           class="mx-20"
@@ -87,13 +130,20 @@ import Table from "@/components/table/index.vue";
 import { FromType, Group, GroupUpdateInput } from "@/types";
 import { nextTick, reactive, ref } from "vue";
 import dayjs from "dayjs";
-import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
+import {
+  ElLoading,
+  ElMessage,
+  ElMessageBox,
+  UploadUserFile,
+} from "element-plus";
 import { createGroup, deteleGroup, getGroupList, updateGroup } from "@/api";
-import { Delete, Edit } from "@element-plus/icons-vue";
+import { Delete, Edit, Plus } from "@element-plus/icons-vue";
 import _ from "lodash";
 
 const tableData = ref<Group[]>();
 const table = ref();
+const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS;
+const fileList = ref<UploadUserFile[]>([]);
 
 const queryParams = reactive({
   currentPage: 1,
@@ -126,6 +176,7 @@ const form = ref<Group>({});
 
 const reset = () => {
   form.value = {};
+  fileList.value = [];
 };
 
 const dialogChange = async (
@@ -137,7 +188,14 @@ const dialogChange = async (
   state && (dialogTableVisible.value = state);
   dialogTitle.value = title;
   formType.value = type;
-  group && (form.value = group);
+  if (group) {
+    form.value = group;
+    group.pic &&
+      fileList.value.push({
+        name: group.pic,
+        url: IMG_ADDRESS + group.pic,
+      });
+  }
   if (dialogTableVisible.value === false) reset();
 };
 
@@ -161,7 +219,15 @@ const deleted = async (group: Group) => {
 };
 
 const update = async () => {
-  const data = _.pick(form.value, ["id", "name", "nameEn"]);
+  const data: GroupUpdateInput = _.pick(form.value, [
+    "id",
+    "name",
+    "nameEn",
+    "describe",
+  ]) as GroupUpdateInput;
+  if (fileList.value[0].raw) {
+    data.file = fileList.value[0].raw;
+  }
   const res = await updateGroup(data as GroupUpdateInput);
   if (res?.code === 200) {
     ElMessage({
@@ -174,7 +240,7 @@ const update = async () => {
 };
 
 const create = async () => {
-  const { name, nameEn } = form.value;
+  const { name, nameEn, describe } = form.value;
   if (!name) {
     ElMessage({
       message: "名称为空",
@@ -185,20 +251,36 @@ const create = async () => {
   let res = await createGroup({
     name,
     nameEn,
+    describe,
+    file: fileList.value[0] ? fileList.value[0].raw : undefined,
   });
   if (res?.code === 200) {
     ElMessage({
       message: res.msg,
       type: "success",
     });
-    dialogTableVisible.value = false
-    getData()
+    dialogTableVisible.value = false;
+    getData();
   }
+};
+</script>
+
+<script lang="ts">
+export default {
+  name: "group",
 };
 </script>
 
 <style lang="scss" scoped>
 .el-table :deep(.cell) {
   text-align: center;
+}
+
+.ellipsis-3 {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 </style>

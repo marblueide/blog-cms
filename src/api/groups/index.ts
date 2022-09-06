@@ -14,6 +14,8 @@ export async function getGroupList(limit: number = 10, offset: number = 0) {
             id
             name
             nameEn
+            describe
+            pic
             createTime
             articles {
               id
@@ -30,7 +32,7 @@ export async function getGroupList(limit: number = 10, offset: number = 0) {
       },
     },
     {
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "network-only",
     }
   );
   return res.getGroupList;

@@ -58,6 +58,14 @@ export const routes: Array<RouteRecordRaw> = [
     ],
   },
   {
+    path: "group",
+    name: "group",
+    meta: {
+      title: "分组管理",
+    },
+    component: () => import("@/views/group/index.vue"),
+  },
+  {
     path: "photo",
     name: "photo",
     meta: {
@@ -72,22 +80,6 @@ export const routes: Array<RouteRecordRaw> = [
       title: "用户管理",
     },
     component: () => import("@/views/user/index.vue"),
-  },
-  {
-    path:"photo",
-    name:"photo",
-    meta:{
-      title:"图片管理"
-    },
-    component:() => import("@/views/photo/index.vue")
-  },
-  {
-    path:"user",
-    name:"user",
-    meta:{
-      title:"用户管理"
-    },
-    component:() => import("@/views/user/index.vue")
   },
   {
     path:"type",
