@@ -1,8 +1,8 @@
-import { TagType } from "@/types/entity";
+import { TagsType } from "@/types/entity";
 
 export interface TagsCreateInput {
   name: string,
   nameEn?: string,
-  type: TagType,
+  type: TagsType | string,
   weight?: number
 }

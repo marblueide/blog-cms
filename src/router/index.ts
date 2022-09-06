@@ -131,6 +131,24 @@ export const routes: Array<RouteRecordRaw> = [
       title: "友链管理",
     },
     component: () => import("@/views/friendsChain/index.vue"),
+    children:[
+      {
+        path:"list",
+        name:"friendsChain_list",
+        meta:{
+          title:"友链列表"
+        },
+        component:() => import("@/views/friendsChain/list.vue")
+      },
+      {
+        path:"type",
+        name:"friendsChain_type",
+        meta:{
+          title:"友链类型"
+        },
+        component:() => import("@/views/friendsChain/type.vue")
+      },
+    ]
   },
 ];
 
