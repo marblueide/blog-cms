@@ -72,6 +72,8 @@ export type Group = {
   id?: number;
   name?: string;
   nameEn?: string;
+  pic?: string;
+  describe?: string;
   createTime?: string;
   articles?: Article[];
 };

@@ -59,6 +59,14 @@ export const routes: Array<RouteRecordRaw> = [
     ],
   },
   {
+    path: "group",
+    name: "group",
+    meta: {
+      title: "分组管理",
+    },
+    component: () => import("@/views/group/index.vue"),
+  },
+  {
     path: "photo",
     name: "photo",
     meta: {
