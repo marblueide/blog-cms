@@ -15,9 +15,7 @@
         <!-- <el-table-column prop="nameEn" label="英文名称" /> -->
         <el-table-column prop="type" label="类别">
           <template #default="{ row }">
-            <el-tag :type="getTagColor(row.type)">{{
-              TagType[row.type]
-            }}</el-tag>
+            <el-tag v-if="row.type" :type="getTagColor(row.type)">{{ row.type?.name }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="weight" label="权重" />
@@ -62,12 +60,16 @@
           <el-input class="w-96" v-model="form.nameEn"></el-input>
         </el-form-item>
         <el-form-item label="类别">
-          <el-select v-model="form.type" placeholder="请选择类别" size="large">
+          <el-select
+            v-model="form.type.name"
+            placeholder="请选择类别"
+            size="large"
+          >
             <el-option
               v-for="item in TagTypeList"
               :key="item.value"
               :label="item.key"
-              :value="item.value"
+              :value="item.key"
             />
           </el-select>
         </el-form-item>
@@ -98,7 +100,7 @@
 import { createTag, deleteTag, getTagList, updateTag } from "@/api";
 import { computed, reactive, ref } from "vue";
 import Table from "@/components/table/index.vue";
-import { FromType, Tag, TagType, TagTypeColor, TagTypeList } from "@/types";
+import { FromType, Tag, TagsType, TagType, TagTypeColor, TagTypeList } from "@/types";
 import dayjs from "dayjs";
 import { Delete, Edit } from "@element-plus/icons-vue";
 import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
@@ -145,10 +147,18 @@ const getTagColor = computed(() => {
 const dialogTableVisible = ref(false);
 const dialogTitle = ref("");
 const formType = ref<FromType>();
-const form = ref<Tag>({});
+const form = ref<Tag>({
+  type:{
+    name:""
+  }
+});
 
 const reset = () => {
-  form.value = {};
+  form.value = {
+    type:{
+      name:""
+    }
+  };
 };
 
 const dialogChange = (
@@ -161,6 +171,7 @@ const dialogChange = (
   dialogTitle.value = title;
   formType.value = type;
   tag && (form.value = tag);
+  form.value.type = form.value.type ?? {} as TagsType
   if (dialogTableVisible.value === false) reset();
 };
 
@@ -186,7 +197,7 @@ const deleted = async (tag: Tag) => {
 
 const update = async () => {
   try {
-    let data = _.omit(form.value, ['__typename', 'createTime']);
+    let data = _.omit(form.value, ["__typename", "createTime"]);
     const res = await updateTag(data);
     if (res?.code === 200) {
       ElMessage({
@@ -194,6 +205,7 @@ const update = async () => {
         type: "success",
       });
       dialogChange(false, "", "");
+      getData()
     }
   } catch (error) {}
 };
@@ -227,9 +239,9 @@ const create = async () => {
 </script>
 
 <script lang="ts">
-  export default {
-    name: 'tags'
-  }
+export default {
+  name: "tags",
+};
 </script>
 
 <style lang="scss" scoped>

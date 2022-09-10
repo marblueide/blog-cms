@@ -17,7 +17,10 @@ export async function getTagList(
           totalCount
           nodes {
             id
-            type
+            type {
+              id
+              name
+            }
             name
             nameEn
             weight
@@ -59,7 +62,10 @@ export async function createTag(input: TagsCreateInput) {
         }
       `,
       {
-        input,
+        input:{
+          ...input,
+          type:input.type.name
+        },
       }
     );
     return res?.createTag;
@@ -110,7 +116,10 @@ export async function updateTag(tag: Tag) {
         }
       `,
       {
-        updateTagInput: tag,
+        updateTagInput: {
+          ...tag,
+          type:tag.type?.name
+        },
       }
     );
 
@@ -120,21 +129,21 @@ export async function updateTag(tag: Tag) {
 
 export async function getTagByNameVague(name: string) {
   return await query<{
-    getTagByVagueName:Tag[]
+    getTagByVagueName: Tag[];
   }>(
     gql`
       query getTagByVo($name: String!) {
         getTagByVagueName(name: $name) {
           id
-          value:name
+          value: name
         }
       }
     `,
     {
-      name
+      name,
     },
     {
-      fetchPolicy:"cache-and-network"
+      fetchPolicy: "cache-and-network",
     }
   );
 }

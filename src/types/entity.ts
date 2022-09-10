@@ -44,14 +44,14 @@ export const TagTypeList = [
     value: 3,
   },
   {
-    key: "Multimedia",
+    key: "multimedia",
     value: 4,
   },
 ];
 
 export type Tag = {
   id?: string;
-  type?: TagType;
+  type?: TagsType;
   name?: string;
   nameEn?: string;
   weight?: number;
@@ -61,6 +61,12 @@ export type Tag = {
   liveShares?: LiveShared[];
   // multimedias?: Multimedia[];
 };
+
+export type TagsType = {
+  id:string
+  name:string
+  Tags:Tag
+}
 
 export type Group = {
   id?: number;
@@ -137,6 +143,12 @@ export type FriendsChain = {
   name?:string
   link?:string
   imgSrc?:string
+  type?:FriendsChainType
+}
+
+export type FriendsChainType = {
+  id?:string
+  name?:string
 }
 
 export const weightMax = 10;

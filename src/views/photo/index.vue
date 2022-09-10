@@ -159,7 +159,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onUnmounted, reactive, ref, watch, watchEffect } from "vue";
+import { nextTick, onActivated, onUnmounted, reactive, ref, watch, watchEffect } from "vue";
 import { UploadFilled } from "@element-plus/icons-vue";
 import {
   addPhotoWall,
@@ -388,6 +388,10 @@ getType();
 onUnmounted(() => {
   unOffsetAndLimit();
 });
+
+onActivated(() => {
+  getData()
+})
 </script>
 
 <script lang="ts">
