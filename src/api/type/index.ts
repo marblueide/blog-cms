@@ -12,6 +12,8 @@ export const getType = async (offset: number = 1, limit: number = 10) => {
           nodes {
             id
             name
+            nameEn
+            describe
             createTime
             rootType {
               id
@@ -33,6 +35,8 @@ export const getType = async (offset: number = 1, limit: number = 10) => {
       fragment typeFields on Type {
         id
         name
+        nameEn
+        describe
         createTime
         rootType {
           id
@@ -92,7 +96,13 @@ export const deleteType = async (id: string) => {
   );
 };
 
-export const createType = async ({ name, parentType, rootType }: Type) => {
+export const createType = async ({
+  name,
+  nameEn,
+  describe,
+  parentType,
+  rootType,
+}: Type) => {
   return await mutation<{
     createType: StatusModel;
   }>(
@@ -107,6 +117,8 @@ export const createType = async ({ name, parentType, rootType }: Type) => {
     {
       input: {
         name,
+        nameEn,
+        describe,
         parentType: parentType?.id ?? null,
         rootType: rootType?.id ?? null,
       },
@@ -114,7 +126,7 @@ export const createType = async ({ name, parentType, rootType }: Type) => {
   );
 };
 
-export const updateType = async ({ name, id }: Type) => {
+export const updateType = async ({ name, id, nameEn, describe }: Type) => {
   return await mutation<{
     updateType: StatusModel;
   }>(
@@ -130,6 +142,8 @@ export const updateType = async ({ name, id }: Type) => {
       input: {
         name,
         id,
+        nameEn,
+        describe,
       },
     }
   );
@@ -159,7 +173,7 @@ export const getTypeByName = async (name: string) => {
       name,
     },
     {
-      fetchPolicy:"cache-and-network"
+      fetchPolicy: "cache-and-network",
     }
   );
 };

@@ -34,65 +34,27 @@
         </div>
       </el-form-item>
       <el-form-item label="标签">
-        <el-tag
-          v-for="(tag, i) in form.tags"
-          :key="tag.id || i"
-          class="mx-1"
-          closable
-          :disable-transitions="false"
-          @close="tagClose(i, form?.tags)"
-        >
-          {{ tag.name }}
-        </el-tag>
-        <el-input
-          v-if="tagInputVisible"
-          ref="TagInputRef"
-          v-model="tagInputValue"
-          class="ml-1 w-20"
-          size="small"
-          @keyup.enter="TagInputConfirm"
-          @blur="TagInputConfirm"
+        <TagInput
+          :data="form.tags"
+          @query-search-async="querySearchAsync"
+          @close-tag="handleCloseTag"
+          v-model:value="inputValue"
+          @handle-input-confirm="handleInputConfirm"
         />
-        <el-button
-          v-else
-          class="button-new-tag ml-1"
-          size="small"
-          @click="tagInputShow"
-        >
-          + New Tag
-        </el-button>
       </el-form-item>
       <el-form-item label="分组">
-        <el-tag
-          v-for="(group, i) in form.groups"
-          :key="group.id"
-          class="mx-1"
-          closable
-          :disable-transitions="false"
-          @close="tagClose(i, form?.groups)"
-        >
-          {{ group.name }}
-        </el-tag>
-        <el-input
-          v-if="groupInputVisibleRef"
-          ref="groupInputRef"
-          v-model="groupInputValueRef"
-          class="ml-1 w-20"
-          size="small"
-          @keyup.enter="groupInputConfirm"
-          @blur="groupInputConfirm"
+        <TagInput
+          :data="form.groups"
+          placeholder="New Group"
+          value-key="name"
+          @query-search-async="queryGroupSearchAsync"
+          @close-tag="handleGroupCloseTag"
+          v-model:value="groupInputValue"
+          @handle-input-confirm="handleGroupInputConfirm"
         />
-        <el-button
-          v-else
-          class="button-new-tag ml-1"
-          size="small"
-          @click="groupInputShow"
-        >
-          + New Group
-        </el-button>
       </el-form-item>
       <el-form-item label="权重">
-        <el-input-number v-model="form.weight" :step="1" :min="0" />
+        <el-input-number v-model="form.weight" :step="1" :min="0" :max="10" />
       </el-form-item>
       <el-form-item label="是否公开">
         <el-switch
@@ -119,6 +81,9 @@ import { nextTick, onActivated, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import MdEditor from "@/components/mdEditor/index.vue";
 import _ from "lodash";
+import TagInput from "@/components/tag.vue";
+import { useTagInput } from "./hook/useTagInput";
+import { useGroupTagInput } from "./hook/useGroupInput";
 
 const route = useRoute();
 const router = useRouter();
@@ -128,6 +93,7 @@ const fileList = ref<UploadUserFile[]>([]);
 const getData = async (id: string) => {
   if (!id) return;
   form.value = await getArticleById(id);
+  !form.value.content && (form.value.content = "");
   if (form.value.pic) {
     fileList.value.push({
       name: form.value.pic,
@@ -135,32 +101,20 @@ const getData = async (id: string) => {
     });
   }
 };
+const { inputValue, handleCloseTag, handleInputConfirm, querySearchAsync } =
+  useTagInput(form);
+const {
+  inputValue: groupInputValue,
+  handleGroupCloseTag,
+  handleGroupInputConfirm,
+  queryGroupSearchAsync,
+} = useGroupTagInput(form);
 
 onActivated(() => {
   const { id } = route.query;
   fileList.value = [];
   getData(id as string);
 });
-
-const tagInputVisible = ref(false);
-const tagInputValue = ref("");
-const TagInputRef = ref<InstanceType<typeof ElInput>>();
-const tagInputShow = () => {
-  tagInputVisible.value = true;
-  nextTick(() => {
-    TagInputRef.value!.input!.focus();
-  });
-};
-const TagInputConfirm = () => {
-  if (tagInputValue.value) {
-    form.value?.tags &&
-      form.value?.tags.push({
-        name: tagInputValue.value,
-      });
-  }
-  tagInputVisible.value = false;
-  tagInputValue.value = "";
-};
 
 const groupInputVisibleRef = ref(false);
 const groupInputValueRef = ref("");

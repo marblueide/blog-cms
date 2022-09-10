@@ -20,6 +20,7 @@ export async function getLiveSharedList(
           totalCount
           nodes {
             id
+            title
             content
             address
             emotion
@@ -57,6 +58,7 @@ export async function getLiveSharedById(id: string) {
       query ($id: String!) {
         getLiveSharedById(id: $id) {
           id
+          title
           content
           address
           emotion

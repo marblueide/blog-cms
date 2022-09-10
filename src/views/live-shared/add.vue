@@ -4,6 +4,9 @@
       <!-- <el-form-item label="id">
         <el-input v-model="form.id" class="w-96" disabled />
       </el-form-item> -->
+      <el-form-item label="标题">
+        <el-input v-model="form.title" class="w-96" />
+      </el-form-item>
       <el-form-item label="封面图">
         <el-upload
           class="avatar-uploader w-96"
@@ -115,13 +118,21 @@
 </template>
 
 <script lang="ts" setup>
-import { LiveShared, LiveSharedCreateInput, LiveSharedUpdateInput } from "@/types";
+import {
+  LiveShared,
+  LiveSharedCreateInput,
+  LiveSharedUpdateInput,
+} from "@/types";
 import { ElInput, ElMessage, UploadUserFile } from "element-plus";
 import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import MdEditor from "@/components/mdEditor/index.vue";
 import _ from "lodash";
-import { createLiveShared, getLiveSharedById, updateLiveShared } from "@/api/live-shared";
+import {
+  createLiveShared,
+  getLiveSharedById,
+  updateLiveShared,
+} from "@/api/live-shared";
 import { UploadFilled } from "@element-plus/icons-vue";
 import Emoji from "@/components/emoji/index.vue";
 import { deCodeEmoji, encodeEmoji } from "@/utils/transformEmoji";

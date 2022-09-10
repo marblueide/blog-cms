@@ -10,7 +10,8 @@
       <el-table-column type="selection" width="55" />
       <el-table-column type="index" label="序号" width="55" />
       <el-table-column prop="id" label="id" show-overflow-tooltip />
-      <el-table-column prop="content" label="内容" show-overflow-tooltip />
+      <el-table-column prop="title" label="标题" show-overflow-tooltip />
+      <!-- <el-table-column prop="content" label="内容" show-overflow-tooltip /> -->
       <el-table-column prop="address" label="地址" />
       <el-table-column prop="emotion" label="心情" />
       <el-table-column prop="illustration" label="封面图" />

@@ -14,6 +14,7 @@
         border
         stripe
         style="width: 100%"
+        :row-class-name="tableRowClassName"
       >
         <el-table-column type="selection" width="55" />
         <el-table-column type="index" width="50" />
@@ -45,18 +46,15 @@
             <span class="ellipsis-3">{{ row.summary }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="content" label="内容" width="150">
+        <!-- <el-table-column prop="content" label="内容" width="150">
           <template #default="{ row }">
             <span class="ellipsis-3">{{ row.content }}</span>
           </template>
-        </el-table-column>
-        <el-table-column prop="contentNum" label="字数" />
-        <el-table-column prop="likes" label="点赞数" />
-        <el-table-column prop="viewNum" label="观看数" />
+        </el-table-column> -->
         <el-table-column prop="tags" label="标签" min-width="160">
           <template #default="{ row }">
             <el-tag
-              class="ml-2"
+              class="ml-2 mb-7"
               v-for="it in row.tags"
               :key="it.id"
               type="success"
@@ -64,6 +62,9 @@
             >
           </template>
         </el-table-column>
+        <!-- <el-table-column prop="contentNum" label="字数" /> -->
+        <el-table-column prop="likes" label="点赞数" />
+        <el-table-column prop="viewNum" label="观看数" />
         <el-table-column
           prop="createTime"
           sortable
@@ -92,7 +93,7 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="150" fixed="right">
+        <el-table-column label="操作" width="175" fixed="right">
           <template #default="{ $index, row }">
             <el-button
               type="primary"
@@ -107,6 +108,30 @@
               @click="deleted(row)"
             >
             </el-button>
+            <el-dropdown trigger="click">
+              <el-button
+                class="ml-12"
+                size="small"
+                type="info"
+                plain
+                :icon="MoreFilled"
+              >
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="dropClick(row, true)" v-if="row.weight !== 10">
+                    <el-icon
+                      ><Download style="transform: rotate(180deg)"
+                    /></el-icon>
+                    置顶
+                  </el-dropdown-item>
+                  <el-dropdown-item @click="dropClick(row, false)" v-else>
+                    <el-icon><Close /></el-icon>
+                    取消置顶
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </template>
         </el-table-column>
       </el-table>
@@ -121,14 +146,25 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { deleteArticle, getArticleList, updateArticle } from "@/api";
+import {
+  deleteArticle,
+  getArticleList,
+  updateArticle,
+  getArticleSticky,
+} from "@/api";
 import Table from "@/components/table/index.vue";
-import { Pagination, Article } from "@/types";
+import { Pagination, Article, weightMax } from "@/types";
 import { ref, reactive, watch } from "vue";
 import _ from "lodash";
 import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
 import dayjs from "dayjs";
-import { Delete, Edit } from "@element-plus/icons-vue";
+import {
+  Delete,
+  Edit,
+  MoreFilled,
+  Download,
+  Close,
+} from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 
 const table = ref();
@@ -147,9 +183,8 @@ const queryParams = reactive({
   deleteDisabled: true,
 });
 
-watch(queryParams, (newVal) => {
-  if (newVal.pageSize * (newVal.currentPage - 1) > tableData.value?.totalCount)
-    getList();
+watch(queryParams, () => {
+  getList();
 });
 
 const getList = async () => {
@@ -160,7 +195,7 @@ const getList = async () => {
     });
   } catch (error) {}
   const offset = queryParams.pageSize * (queryParams.currentPage - 1);
-  const { nodes, totalCount } = await getArticleList(
+  const { nodes, totalCount } = await getArticleSticky(
     queryParams.pageSize,
     offset
   );
@@ -170,8 +205,14 @@ const getList = async () => {
   };
   loadingInstance?.close();
 };
-
 getList();
+
+const tableRowClassName = ({ row }: { row: Article; rowIndex: number }) => {
+  if (row.weight === weightMax) {
+    return "sticky";
+  }
+  return "";
+};
 
 const switchChange = async (e: boolean, { id }: Article) => {
   if (!id) return;
@@ -221,6 +262,18 @@ const deleted = async (article: Article) => {
     }
   } catch (error) {}
 };
+
+const dropClick = async ({ id }: Article, isSticky: boolean) => {
+  if (!id) return;
+  let res = await updateArticle({ id, weight: isSticky ? weightMax : 0 });
+  if (res?.code == 200) {
+    ElMessage({
+      message: res.msg,
+      type: "success",
+    });
+    getList();
+  }
+};
 </script>
 
 <style scoped lang="scss">
@@ -234,5 +287,9 @@ const deleted = async (article: Article) => {
 
 .el-table :deep(.cell) {
   text-align: center;
+}
+
+.el-table :deep(.sticky .el-table__cell) {
+  background-color: var(--el-color-success-light-9) !important;
 }
 </style>

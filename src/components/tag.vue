@@ -1,7 +1,7 @@
 <template>
   <div class="tag">
-    <el-tag class="ml-5" closable @close="handleClose(tag)" v-for="tag in data">
-      {{ tag.name }}
+    <el-tag class="ml-5" closable @close="handleClose(it)" v-for="it in data">
+      {{ it[label] }}
     </el-tag>
     <el-autocomplete
       v-if="visible"
@@ -11,6 +11,7 @@
       ref="InputRef"
       clearable
       size="small"
+      :value-key="valueKey"
       class="inline-input ml-3 w-20"
       @input="emit('update:value', $event)"
       @keyup.enter="handleInputConfirm"
@@ -27,7 +28,7 @@
       @blur="handleInputConfirm"
     /> -->
     <el-button v-else class="button-new-tag ml-1" size="small" @click="show">
-      + New Tag
+      + {{placeholder}}
     </el-button>
   </div>
 </template>
@@ -38,10 +39,16 @@ import { withDefaults, defineProps, defineEmits, ref, nextTick } from "vue";
 const props = withDefaults(
   defineProps<{
     value: string;
-    data?: Tag[];
+    data?: any[];
+    label?: string;
+    valueKey?: string;
+    placeholder?: string;
   }>(),
   {
     value: "",
+    label: "name",
+    valueKey: "value",
+    placeholder: "请输入内容",
   }
 );
 
@@ -54,9 +61,9 @@ const show = async () => {
   InputRef.value.focus();
 };
 
-const handleSearch = async (query:string,cb: (arg: any) => void) => {
-  emit("querySearchAsync",query,cb)
-}
+const handleSearch = async (query: string, cb: (arg: any) => void) => {
+  emit("querySearchAsync", query, cb);
+};
 
 const handleInputConfirm = (e: any) => {
   emit("handleInputConfirm");
@@ -64,15 +71,15 @@ const handleInputConfirm = (e: any) => {
   visible.value = false;
 };
 
-const handleClose = (tag:Tag) => {
-  emit("closeTag",tag)
-}
+const handleClose = (tag: any) => {
+  emit("closeTag", tag);
+};
 
 const emit = defineEmits<{
   (e: "handleInputConfirm"): void;
   (e: "showInput"): void;
-  (e: "closeTag",tag:Tag):void
+  (e: "closeTag", tag: any): void;
   (e: "update:value", event: any): void;
-  (e:"querySearchAsync",val:string,cb: (arg: any) => void):void
+  (e: "querySearchAsync", val: string, cb: (arg: any) => void): void;
 }>();
 </script>

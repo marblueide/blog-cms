@@ -1,5 +1,6 @@
 export interface LiveSharedCreateInput {
-  content: string;
+  title: string;
+  content?: string;
   tags: string[];
   weight?: number;
   address?: string;
@@ -9,6 +10,7 @@ export interface LiveSharedCreateInput {
 
 export interface LiveSharedUpdateInput {
   id: string;
+  title?: string;
   content?: string;
   tags?: string[];
   weight?: number;

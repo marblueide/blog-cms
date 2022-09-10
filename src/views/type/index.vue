@@ -22,6 +22,13 @@
           show-overflow-tooltip
         />
         <el-table-column align="center" prop="name" label="名称" />
+        <el-table-column align="center" prop="nameEn" label="英文名称" />
+        <el-table-column
+          align="center"
+          prop="describe"
+          label="描述"
+          show-overflow-tooltip
+        />
         <el-table-column align="center" label="创建时间" sortable>
           <template #default="{ row }">
             {{ dayjs(+row.createTime).format("YYYY-MM-DD HH:mm") }}
@@ -74,6 +81,18 @@
         </el-form-item>
         <el-form-item label="名称">
            <el-input class="w-96" v-model="form.name"></el-input>      
+        </el-form-item>
+        <el-form-item label="英文名称">
+           <el-input class="w-96" v-model="form.nameEn"></el-input>      
+        </el-form-item>
+        <el-form-item label="描述">
+           <el-input
+            class="w-96"
+            v-model="form.describe"
+            :autosize="{ minRows: 2, maxRows: 3 }"
+            type="textarea"
+            placeholder="Please input"
+          />
         </el-form-item>
       </el-form>
       <div class="text-center w-full">
@@ -162,6 +181,8 @@ const handleConfirm = async () => {
         await updateType({
           id: form.value.id,
           name: form.value.name,
+          nameEn: form.value.nameEn,
+          describe: form.value.describe
         })
       )?.updateType.msg;
     }
@@ -176,11 +197,15 @@ const handleConfirm = async () => {
 };
 
 const getData = async () => {
-  const {pageSize,currentPage} = prop
-  const res = await getType(pageSize * (currentPage - 1) , prop.pageSize);
+  const { pageSize, currentPage } = prop;
+  const res = await getType(pageSize * (currentPage - 1), prop.pageSize);
   tableData.value = res.getTypeByRoot.nodes;
   prop.total = res.getTypeByRoot.totalCount;
 };
+
+const reset = () => {
+  form.value = {}
+}
 
 let unOffsetAndLimit = watch(
   () => [prop.currentPage, prop.pageSize],
@@ -203,6 +228,7 @@ let unOffsetAndLimit = watch(
 
 const refreshClick = () => {
   getData();
+  reset()
 };
 
 onUnmounted(() => {

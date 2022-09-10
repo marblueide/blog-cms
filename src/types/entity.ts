@@ -108,6 +108,7 @@ export enum CommentTypeEnum {
 
 export type LiveShared = {
   id?: string;
+  title?: string;
   content?: string;
   address?: string;
   emotion?: string;
@@ -122,6 +123,8 @@ export type LiveShared = {
 export type Type = {
   id?: string;
   name?: string;
+  nameEn?: string,
+  describe?: string,
   createTime?:string
   rootType?: Type;
   parentType?: Type;
@@ -135,3 +138,5 @@ export type FriendsChain = {
   link?:string
   imgSrc?:string
 }
+
+export const weightMax = 10;

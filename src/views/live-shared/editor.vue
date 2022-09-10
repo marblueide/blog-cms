@@ -4,6 +4,9 @@
       <el-form-item label="id">
         <el-input v-model="form.id" class="w-96" disabled />
       </el-form-item>
+      <el-form-item label="标题">
+        <el-input v-model="form.title" class="w-96" />
+      </el-form-item>
       <el-form-item label="封面图">
         <el-upload
           class="avatar-uploader w-96"

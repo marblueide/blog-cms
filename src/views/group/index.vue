@@ -20,6 +20,7 @@
               :preview-src-list="[IMG_ADDRESS + row.pic]"
               hide-on-click-modal
               fit="cover"
+              preview-teleported
             />
           </template>
         </el-table-column>
@@ -84,15 +85,6 @@
         <el-form-item label="名称英文">
           <el-input class="w-96" v-model="form.nameEn"></el-input>
         </el-form-item>
-        <el-form-item label="描述信息">
-          <el-input
-            class="w-96"
-            type="textarea"
-            v-model="form.describe"
-            :rows="4"
-            placeholder="请输入描述信息"
-          ></el-input>
-        </el-form-item>
         <el-form-item label="封面图">
           <el-upload
             class="avatar-uploader"
@@ -103,6 +95,15 @@
           >
             <el-icon><Plus /></el-icon>
           </el-upload>
+        </el-form-item>
+        <el-form-item label="描述信息">
+          <el-input
+            class="w-96"
+            type="textarea"
+            v-model="form.describe"
+            :rows="4"
+            placeholder="请输入描述信息"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div class="text-center w-full mt-10">
@@ -153,7 +154,18 @@ const queryParams = reactive({
   deleteDisabled: true,
 });
 
+const dialogTableVisible = ref(false);
+const dialogTitle = ref("");
+const formType = ref<FromType>();
+const form = ref<Group>({});
+
+const reset = () => {
+  form.value = {};
+  fileList.value = [];
+};
+
 const getData = async () => {
+  reset()
   let loadingInstance;
   try {
     loadingInstance = ElLoading.service({
@@ -168,16 +180,6 @@ const getData = async () => {
   loadingInstance?.close();
 };
 getData();
-
-const dialogTableVisible = ref(false);
-const dialogTitle = ref("");
-const formType = ref<FromType>();
-const form = ref<Group>({});
-
-const reset = () => {
-  form.value = {};
-  fileList.value = [];
-};
 
 const dialogChange = async (
   title: string,

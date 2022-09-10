@@ -38,6 +38,26 @@ export async function getGroupList(limit: number = 10, offset: number = 0) {
   return res.getGroupList;
 }
 
+export async function getGroupByVagueName(name: string) {
+  let res = await query<{ getGroupByVagueName: Group }>(
+    gql`
+      query GetGroupByVagueName($name: String!) {
+        getGroupByVagueName(name: $name) {
+          id
+          name
+        }
+      }
+    `,
+    {
+      name
+    },
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+  return res.getGroupByVagueName;
+}
+
 export async function createGroup(input: GroupCreateInput) {
   try {
     let res = await mutation<
