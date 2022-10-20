@@ -14,6 +14,7 @@ export type Article = {
   tags?: Tag[];
   groups?: Group[];
   comments?: Comment[];
+  type: Type
 };
 
 export enum TagType {
@@ -63,10 +64,10 @@ export type Tag = {
 };
 
 export type TagsType = {
-  id:string
-  name:string
-  Tags:Tag
-}
+  id: string;
+  name: string;
+  Tags: Tag;
+};
 
 export type Group = {
   id?: number;
@@ -85,8 +86,8 @@ export type PhotoWall = {
   originUrl?: string;
   author?: string;
   createTime?: string;
-  tags?:Tag[];
-  type?:Type
+  tags?: Tag[];
+  type?: Type;
 };
 
 export type Comment = {
@@ -104,12 +105,12 @@ export type Comment = {
   rootComment?: Comment;
   parentComment?: Comment;
   children?: Comment[];
-  type?:CommentTypeEnum
+  type?: CommentTypeEnum;
 };
 
 export enum CommentTypeEnum {
   article,
-  commnet
+  commnet,
 }
 
 export type LiveShared = {
@@ -125,30 +126,44 @@ export type LiveShared = {
   tags: Tag[];
 };
 
-
 export type Type = {
   id?: string;
   name?: string;
-  nameEn?: string,
-  describe?: string,
-  createTime?:string
+  nameEn?: string;
+  describe?: string;
+  createTime?: string;
   rootType?: Type;
   parentType?: Type;
   childType?: Type[];
   hasChildren?: boolean;
-}
+};
 
 export type FriendsChain = {
-  id?:string
-  name?:string
-  link?:string
-  imgSrc?:string
-  type?:FriendsChainType
-}
+  id?: string;
+  name?: string;
+  link?: string;
+  imgSrc?: string;
+  type?: FriendsChainType;
+};
 
 export type FriendsChainType = {
-  id?:string
-  name?:string
-}
+  id?: string;
+  name?: string;
+};
 
 export const weightMax = 10;
+
+export type Multimedia = {
+  id?: string;
+  title?: string;
+  author?: string;
+  path?: string;
+  cover?: string;
+  format?: string;
+  outerLink?: string;
+  weight?: number;
+  createTime?: string;
+  updateTime?: string;
+  tags?: Tag[];
+  type?: Type;
+};

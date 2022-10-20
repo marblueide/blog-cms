@@ -8,6 +8,7 @@ export interface ArticleUpdateInput {
   tags?: string[]
   groups?: string[]
   file?: File
+  type?: string
 }
 
 export interface ArticleCreateInput {
@@ -19,4 +20,5 @@ export interface ArticleCreateInput {
   tags?: string[]
   groups?: string[]
   file?: File;
+  type?: string
 }

@@ -98,40 +98,40 @@ export const routes: Array<RouteRecordRaw> = [
     },
     component: () => import("@/views/tags/index.vue"),
   },
-  {
-    path: "liveShared",
-    name: "liveShared",
-    meta: {
-      title: "生活分享",
-    },
-    component: () => import("@/views/live-shared/index.vue"),
-    children: [
-      {
-        path: "list",
-        name: "liveSharedList",
-        meta: {
-          title: "生活分享列表",
-        },
-        component: () => import("@/views/live-shared/list.vue"),
-      },
-      {
-        path: "editor",
-        name: "liveSharedEditor",
-        meta: {
-          title: "生活分享编辑",
-        },
-        component: () => import("@/views/live-shared/editor.vue"),
-      },
-      {
-        path: "add",
-        name: "liveSharedAdd",
-        meta: {
-          title: "生活分享添加",
-        },
-        component: () => import("@/views/live-shared/add.vue"),
-      },
-    ],
-  },
+  // {
+  //   path: "liveShared",
+  //   name: "liveShared",
+  //   meta: {
+  //     title: "生活分享",
+  //   },
+  //   component: () => import("@/views/live-shared/index.vue"),
+  //   children: [
+  //     {
+  //       path: "list",
+  //       name: "liveSharedList",
+  //       meta: {
+  //         title: "生活分享列表",
+  //       },
+  //       component: () => import("@/views/live-shared/list.vue"),
+  //     },
+  //     {
+  //       path: "editor",
+  //       name: "liveSharedEditor",
+  //       meta: {
+  //         title: "生活分享编辑",
+  //       },
+  //       component: () => import("@/views/live-shared/editor.vue"),
+  //     },
+  //     {
+  //       path: "add",
+  //       name: "liveSharedAdd",
+  //       meta: {
+  //         title: "生活分享添加",
+  //       },
+  //       component: () => import("@/views/live-shared/add.vue"),
+  //     },
+  //   ],
+  // },
   {
     path: "friends_Chain",
     name: "friendsChain",
@@ -158,6 +158,40 @@ export const routes: Array<RouteRecordRaw> = [
       },
     ]
   },
+  {
+    path: 'multimedia',
+    name: 'multimedia',
+    component: () => import('@/views/multimedia/index.vue'),
+    meta: {
+      title: '多媒体管理'
+    },
+    children: [
+      {
+        name: 'multimediaList',
+        path: 'multimediaList',
+        component: () => import('@/views/multimedia/list.vue'),
+        meta: {
+          title: "多媒体列表"
+        }
+      },
+      {
+        name: 'multimediaEdit',
+        path: 'multimediaEdit',
+        component: () => import('@/views/multimedia/editor.vue'),
+        meta: {
+          title: "多媒体编辑"
+        }
+      },
+      {
+        name: 'multimediaAdd',
+        path: 'multimediaAdd',
+        component: () => import('@/views/multimedia/add.vue'),
+        meta: {
+          title: "多媒体添加"
+        }
+      }
+    ]
+  }
 ];
 
 //基本路由

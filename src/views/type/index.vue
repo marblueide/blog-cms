@@ -191,6 +191,7 @@ const handleConfirm = async () => {
       type: "success",
       message: msg,
     });
+    reset()
   } finally {
     getData();
   }

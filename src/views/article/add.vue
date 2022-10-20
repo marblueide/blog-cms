@@ -57,6 +57,15 @@
           @handle-input-confirm="handleGroupInputConfirm"
         />
       </el-form-item>
+      <el-form-item label="类别">
+        <el-cascader
+          :options="selectData"
+          clearable
+          :show-all-levels="false"
+          :props="selectProp"
+          v-model="formType"
+        />
+      </el-form-item>
       <el-form-item label="权重">
         <el-input-number v-model="form.weight" :step="1" :min="0" />
       </el-form-item>
@@ -79,8 +88,8 @@
 </template>
 
 <script lang="ts" setup>
-import { createArticle } from "@/api";
-import { Article, ArticleCreateInput } from "@/types";
+import { createArticle, getTypeByName } from "@/api";
+import { Article, ArticleCreateInput, Type } from "@/types";
 import {
   ElInput,
   ElMessage,
@@ -127,6 +136,22 @@ const {
   handleGroupInputConfirm,
   queryGroupSearchAsync,
 } = useGroupTagInput(form);
+const formType = ref<string>("");
+const selectData = ref<Type[]>([]);
+const selectProp = {
+  value: "id",
+  label: "name",
+  children: "childType",
+  checkStrictly: true,
+  emitPath: false,
+};
+
+const getType = async () => {
+  const res = await getTypeByName("Article");
+  selectData.value = res.getTypeByNameAndRoot.childType || [];
+};
+
+getType();
 
 const reset = () => {
   form.value = {
@@ -139,36 +164,12 @@ const reset = () => {
     groups: [],
   };
   fileList.value = [];
+  formType.value = ""
 };
 
 onActivated(() => {
   reset();
 });
-
-const groupInputVisibleRef = ref(false);
-const groupInputValueRef = ref("");
-const groupInputRef = ref<InstanceType<typeof ElInput>>();
-
-const groupInputShow = () => {
-  groupInputVisibleRef.value = true;
-  nextTick(() => {
-    groupInputRef.value!.input!.focus();
-  });
-};
-const groupInputConfirm = () => {
-  if (groupInputValueRef.value) {
-    form.value?.groups &&
-      form.value?.groups.push({
-        name: groupInputValueRef.value,
-      });
-  }
-  groupInputVisibleRef.value = false;
-  groupInputValueRef.value = "";
-};
-const tagClose = (index: number, prop: any[] | undefined) => {
-  if (!Array.isArray(prop)) return;
-  prop.splice(index, 1);
-};
 
 const mdEditorUploadImg = (files: File[]) => {
   return files.map((it) => {
@@ -197,6 +198,7 @@ const create = async () => {
     ...form.value,
     tags,
     groups,
+    type: formType.value
   };
   if (fileList.value[0]?.raw) {
     input.file = fileList.value[0].raw;

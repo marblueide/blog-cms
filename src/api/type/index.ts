@@ -73,6 +73,30 @@ export const getType = async (offset: number = 1, limit: number = 10) => {
   );
 };
 
+export const getTypeByNameVague = async (name: string) => {
+  let res =  await query<{
+    getTypeByNameVague: Type[];
+  }>(
+    gql`
+      query GetTypeByNameVague($name: String!) {
+        getTypeByNameVague(name: $name) {
+          id
+          name
+          nameEn
+          describe
+        }
+      }
+    `,
+    {
+      name
+    },
+    {
+      fetchPolicy: "cache-and-network",
+    }
+  );
+  return res.getTypeByNameVague
+};
+
 export const deleteType = async (id: string) => {
   return mutation<
     {

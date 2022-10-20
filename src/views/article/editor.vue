@@ -53,6 +53,15 @@
           @handle-input-confirm="handleGroupInputConfirm"
         />
       </el-form-item>
+      <el-form-item label="类别">
+        <el-cascader
+          :options="selectData"
+          clearable
+          :show-all-levels="false"
+          :props="selectProp"
+          v-model="formType"
+        />
+      </el-form-item>
       <el-form-item label="权重">
         <el-input-number v-model="form.weight" :step="1" :min="0" :max="10" />
       </el-form-item>
@@ -73,8 +82,8 @@
 </template>
 
 <script lang="ts" setup>
-import { getArticleById, updateArticle } from "@/api";
-import { Article, ArticleUpdateInput, Group, Tag } from "@/types";
+import { getArticleById, getTypeByName, updateArticle } from "@/api";
+import { Article, ArticleUpdateInput, Group, Tag, Type } from "@/types";
 import { ElInput, ElMessage, UploadUserFile } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { nextTick, onActivated, reactive, ref } from "vue";
@@ -90,6 +99,25 @@ const router = useRouter();
 
 const form = ref<Article>();
 const fileList = ref<UploadUserFile[]>([]);
+const formType = ref<string>("");
+const selectData = ref<Type[]>([]);
+const selectProp = {
+  value: "id",
+  label: "name",
+  children: "childType",
+  checkStrictly: true,
+  emitPath: false,
+};
+
+const { inputValue, handleCloseTag, handleInputConfirm, querySearchAsync } =
+  useTagInput(form);
+const {
+  inputValue: groupInputValue,
+  handleGroupCloseTag,
+  handleGroupInputConfirm,
+  queryGroupSearchAsync,
+} = useGroupTagInput(form);
+
 const getData = async (id: string) => {
   if (!id) return;
   form.value = await getArticleById(id);
@@ -100,46 +128,29 @@ const getData = async (id: string) => {
       url: import.meta.env.VITE_BASE_IMG_ADDRESS + form.value.pic,
     });
   }
+  if (form.value.type) {
+    formType.value = form.value.type.id as string
+  }
 };
-const { inputValue, handleCloseTag, handleInputConfirm, querySearchAsync } =
-  useTagInput(form);
-const {
-  inputValue: groupInputValue,
-  handleGroupCloseTag,
-  handleGroupInputConfirm,
-  queryGroupSearchAsync,
-} = useGroupTagInput(form);
+
+const reset = () => {
+  form.value = {}
+  formType.value = ""
+  fileList.value = []
+}
+
+const getType = async () => {
+  const res = await getTypeByName("Article");
+  selectData.value = res.getTypeByNameAndRoot.childType || [];
+};
+
+getType();
 
 onActivated(() => {
   const { id } = route.query;
-  fileList.value = [];
+  reset()
   getData(id as string);
 });
-
-const groupInputVisibleRef = ref(false);
-const groupInputValueRef = ref("");
-const groupInputRef = ref<InstanceType<typeof ElInput>>();
-
-const groupInputShow = () => {
-  groupInputVisibleRef.value = true;
-  nextTick(() => {
-    groupInputRef.value!.input!.focus();
-  });
-};
-const groupInputConfirm = () => {
-  if (groupInputValueRef.value) {
-    form.value?.groups &&
-      form.value?.groups.push({
-        name: groupInputValueRef.value,
-      });
-  }
-  groupInputVisibleRef.value = false;
-  groupInputValueRef.value = "";
-};
-const tagClose = (index: number, prop: any[] | undefined) => {
-  if (!Array.isArray(prop)) return;
-  prop.splice(index, 1);
-};
 
 const mdEditorUploadImg = (files: File[]) => {
   return files.map((it) => {
@@ -159,6 +170,7 @@ const update = async () => {
     ..._.omit(form.value, ["pic", "__typename"]),
     tags,
     groups,
+    type: formType.value,
   };
   if (fileList.value[0]?.raw) {
     input.file = fileList.value[0].raw;

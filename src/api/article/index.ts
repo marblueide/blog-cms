@@ -80,8 +80,8 @@ export async function getArticleSticky(limit: number = 10, offset: number = 0) {
     {
       input: {
         limit,
-        offset
-      }
+        offset,
+      },
     },
     {
       fetchPolicy: "network-only",
@@ -111,6 +111,12 @@ export async function getArticleById(id: string) {
           groups {
             id
             name
+          }
+          type {
+            id
+            name
+            nameEn
+            createTime
           }
         }
       }

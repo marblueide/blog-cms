@@ -8,7 +8,6 @@ const queryGroupSearchAsync = async (val: string, cb: (arg: any) => void) => {
 };
 
 export const useGroupTagInput = (form: Ref<Article>) => {
-  debugger
   const inputValue = ref("");
   const handleGroupInputConfirm = () => {
     if (inputValue.value) {
@@ -18,7 +17,6 @@ export const useGroupTagInput = (form: Ref<Article>) => {
     }
   };
   const handleGroupCloseTag = (tag: Type) => {
-    debugger
     const index = form.value.groups?.findIndex((v) => v == tag);
     index != -1 && form.value.groups?.splice(index as number, 1);
   };

@@ -154,7 +154,7 @@ import {
 } from "@/api";
 import Table from "@/components/table/index.vue";
 import { Pagination, Article, weightMax } from "@/types";
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, onActivated } from "vue";
 import _ from "lodash";
 import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
 import dayjs from "dayjs";
@@ -183,10 +183,6 @@ const queryParams = reactive({
   deleteDisabled: true,
 });
 
-watch(queryParams, () => {
-  getList();
-});
-
 const getList = async () => {
   let loadingInstance;
   try {
@@ -205,7 +201,14 @@ const getList = async () => {
   };
   loadingInstance?.close();
 };
-getList();
+onActivated(() => {
+  getList();
+})
+
+watch(queryParams, () => {
+  getList();
+});
+
 
 const tableRowClassName = ({ row }: { row: Article; rowIndex: number }) => {
   if (row.weight === weightMax) {
